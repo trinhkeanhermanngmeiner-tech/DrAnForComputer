@@ -175,6 +175,22 @@ namespace BacSiMayTinh.Core
             }
             catch (Exception ex) { Check("Kiểm tra ổ đĩa", false, ex.Message); }
 
+            // Cập nhật từ GitHub: đọc bản mới nhất, tải exe về thư mục tạm, kiểm tra rồi xóa (không cài)
+            try
+            {
+                var info = Task.Run(() => Updater.LatestAsync()).Result;
+                Check("Đọc bản phát hành mới nhất trên GitHub", info != null && !string.IsNullOrEmpty(info.ExeUrl),
+                    info == null ? "null" : $"v{info.Version}, exe {info.ExeSize} byte, mới hơn bản đang chạy: {Updater.IsNewer(info)}");
+                if (info?.ExeUrl != null)
+                {
+                    var file = Task.Run(() => Updater.DownloadAsync(info)).Result;
+                    Check("Tải và kiểm tra tệp cập nhật", File.Exists(file) && new FileInfo(file).Length == info.ExeSize, file);
+                    File.Delete(file);
+                }
+                Check("So sánh phiên bản", Updater.IsNewer(new UpdateInfo { Version = "99.0.0" }) && !Updater.IsNewer(new UpdateInfo { Version = "1.0.0" }));
+            }
+            catch (Exception ex) { Check("Cập nhật từ GitHub", false, ex.GetBaseException().Message); }
+
             // Từ điển tiếng Anh: placeholder khớp
             int badFmt = Strings.En.Count(kv =>
                 string.Join(",", System.Text.RegularExpressions.Regex.Matches(kv.Key, @"\{(\d+)").Cast<System.Text.RegularExpressions.Match>().Select(m => m.Groups[1].Value).Distinct().OrderBy(x => x)) !=

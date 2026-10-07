@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -24,8 +24,8 @@
     <Authors>BS. Trịnh Kế An</Authors>
     <Copyright>© 2026 BS. Trịnh Kế An</Copyright>
     <Description>DrAn For Computer - phần mềm tối ưu, dọn dẹp và sửa lỗi Windows. Tác giả: BS. Trịnh Kế An</Description>
-    <Version>1.1.0</Version>
-    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.1</Version>
+    <FileVersion>1.1.1.0</FileVersion>
     <NeutralLanguage>vi-VN</NeutralLanguage>
   </PropertyGroup>
 

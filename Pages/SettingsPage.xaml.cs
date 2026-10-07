@@ -44,6 +44,8 @@ namespace BacSiMayTinh.Pages
             AboutBank.Text = AppInfo.BankName;
             (L.IsEnglish ? LangEn : LangVi).IsChecked = true;
             UpdateRow.Visibility = Updater.Enabled ? Visibility.Visible : Visibility.Collapsed;
+            AutoUpdate.IsChecked = S.AutoCheckUpdate;
+            UpdateHintText();
             UpdateInstallState();
             _loading = false;
         }
@@ -101,17 +103,17 @@ namespace BacSiMayTinh.Pages
 
         private async void CheckUpdate_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var info = await Updater.CheckAsync();
-                if (info == null) { MainWindow.Instance.Toast(L.T("Bạn đang dùng phiên bản mới nhất."), ToastKind.Info); return; }
-                if (Dialog.Confirm(L.F("Có phiên bản mới {0}", info.Version), info.Notes ?? "", L.T("Tải về"), kind: ToastKind.Info) && !string.IsNullOrEmpty(info.Url))
-                    ProcessRunner.Open(info.Url);
-            }
-            catch (Exception ex)
-            {
-                MainWindow.Instance.Toast(L.T("Không kiểm tra được cập nhật: ") + ex.Message, ToastKind.Warning);
-            }
+            await UpdateFlow.CheckManualAsync();
+            UpdateHintText();
+        }
+
+        private void GitHub_Click(object sender, RoutedEventArgs e) => ProcessRunner.Open(AppInfo.GitHubUrl);
+
+        private void UpdateHintText()
+        {
+            UpdateHint.Text = DateTime.TryParse(S.LastUpdateCheck, out var last)
+                ? L.F("Đang dùng bản {0} · kiểm tra lần cuối {1:HH:mm dd/MM/yyyy}", AppInfo.Version, last)
+                : L.F("Đang dùng bản {0}", AppInfo.Version);
         }
 
         private void Donate_Click(object sender, RoutedEventArgs e) => Donate.Show();
@@ -138,6 +140,7 @@ namespace BacSiMayTinh.Pages
             S.AutoRestorePoint = AutoRestore.IsChecked == true;
             S.MinimizeToTray = MinimizeToTray.IsChecked == true;
             S.AutoFreeRam = AutoFreeRam.IsChecked == true;
+            S.AutoCheckUpdate = AutoUpdate.IsChecked == true;
             if (sender == ReduceEffects)
             {
                 S.ReduceEffects = ReduceEffects.IsChecked == true;

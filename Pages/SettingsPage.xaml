@@ -134,13 +134,26 @@
                                 <Button x:Name="UninstallBtn" Content="{c:T 'Gỡ cài đặt'}" Margin="8,0,0,0" Click="Uninstall_Click"/>
                             </StackPanel>
                         </Grid>
-                        <Grid x:Name="UpdateRow">
+                        <Grid x:Name="UpdateRow" Margin="0,0,0,12">
                             <StackPanel Margin="0,0,200,0">
                                 <TextBlock Text="{c:T 'Kiểm tra phiên bản mới'}" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="UpdateHint" Style="{StaticResource T.Muted}" TextWrapping="Wrap"
-                                           Text="{c:T 'Chỉ tải một tệp thông tin phiên bản nhỏ, không gửi dữ liệu gì.'}"/>
+                                <TextBlock x:Name="UpdateHint" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
                             </StackPanel>
                             <Button HorizontalAlignment="Right" VerticalAlignment="Center" Content="{c:T 'Kiểm tra cập nhật'}" Click="CheckUpdate_Click"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,80,0">
+                                <TextBlock Text="{c:T 'Tự kiểm tra cập nhật khi mở phần mềm'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Tối đa 1 lần mỗi ngày. Chỉ hỏi GitHub phiên bản mới nhất, không gửi dữ liệu cá nhân.'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <CheckBox x:Name="AutoUpdate" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="Setting_Click"/>
+                        </Grid>
+                        <Grid>
+                            <StackPanel Margin="0,0,200,0">
+                                <TextBlock Text="{c:T 'Trang dự án trên GitHub'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Tải bản mới nhất, xem mã nguồn, gửi báo lỗi (Issues).'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center" Content="{c:T 'Mở GitHub'}" Click="GitHub_Click"/>
                         </Grid>
                     </StackPanel>
                 </Border>

@@ -7,7 +7,7 @@ namespace BacSiMayTinh.Core
     {
         public const string Name = "DrAn For Computer";
         public const string Author = "BS. Trịnh Kế An";
-        public const string Version = "1.1.0";
+        public const string Version = "1.1.1";
         public static string Edition => L.T("Bản miễn phí");
         public static string Slogan => L.T("Bác sĩ chăm sóc máy tính của bạn");
         public const string Id = "DrAnForComputer";
@@ -22,7 +22,8 @@ namespace BacSiMayTinh.Core
         public const string ContactEmail = "bstrinhkean@gmail.com";
 
         /// <summary>Địa chỉ tệp JSON thông tin phiên bản mới: {"version":"1.2.0","url":"…","notes":"…"}. Để trống = tắt kiểm tra cập nhật.</summary>
-        public const string UpdateUrl = "";
+        public const string GitHubUrl = "https://github.com/trinhkeanhermanngmeiner-tech/DrAnForComputer";
+        public const string UpdateUrl = "https://api.github.com/repos/trinhkeanhermanngmeiner-tech/DrAnForComputer/releases/latest";
 
         private static string _dataDir;
         public static string DataDir

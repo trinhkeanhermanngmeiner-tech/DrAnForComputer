@@ -17,6 +17,7 @@ Nếu Windows SmartScreen cảnh báo: bấm **More info → Run anyway** (phầ
 - Thông tin phần cứng, sức khỏe ổ cứng/pin, xuất báo cáo
 - Quản lý phần mềm: gỡ sạch, cập nhật hàng loạt, cài nhanh qua winget
 - Phân tích ổ đĩa, tệp trùng lặp, đo tốc độ và **phát hiện USB giả dung lượng**
+- **Tự cập nhật** từ GitHub Releases (bấm một nút là tải và cài bản mới)
 
 ## Ủng hộ tác giả
 
@@ -78,8 +79,8 @@ Kết quả: `bin/Release/net48/DrAnForComputer.exe`. (Thư mục/namespace mã 
 ## Cấu hình
 
 - `AppInfo.BankAccount` / `BankName`: thông tin ủng hộ; mã QR ở `Assets/donate_qr.png` (VietQR, BIN 970454).
-- `AppInfo.UpdateUrl`: để trống = ẩn nút kiểm tra cập nhật. Khi có máy chủ, trỏ tới tệp JSON
-  `{"version":"1.2.0","url":"…","notes":"…"}`.
+- `AppInfo.UpdateUrl`: API GitHub `releases/latest` của kho này. Phát hành bản mới = tạo Release có tag `vX.Y.Z`
+  kèm tệp `DrAnForComputer.exe` – ứng dụng sẽ tự phát hiện, tải và thay bản cũ (để trống = tắt).
 
 ## Dữ liệu người dùng
 

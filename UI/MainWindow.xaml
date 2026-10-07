@@ -51,6 +51,13 @@
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Bottom" Margin="20,10,20,18">
+                    <Button x:Name="UpdateBanner" Style="{StaticResource Btn.Primary}" HorizontalAlignment="Stretch" Margin="0,0,0,12" Padding="10,7"
+                            Visibility="Collapsed" Click="UpdateBanner_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE896;" Style="{StaticResource T.Icon}" FontSize="13"/>
+                            <TextBlock x:Name="UpdateBannerText" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Button>
                     <Border Style="{StaticResource Badge}" Background="{DynamicResource B.AccentSoft}" Margin="0,0,0,8">
                         <TextBlock Text="{c:T 'BẢN MIỄN PHÍ'}" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource B.Accent}"/>
                     </Border>

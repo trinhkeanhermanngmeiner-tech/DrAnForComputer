@@ -77,11 +77,12 @@ namespace BacSiMayTinh.UI
                 catch { }
             };
             Closing += OnClosing;
-            Loaded += (s, e) => { if (_current == null) Navigate("dashboard"); };
+            Loaded += (s, e) => { if (_current == null) Navigate("dashboard"); _ = UpdateFlow.AutoCheckAsync(); };
         }
 
         private void UpdateStaticTexts()
         {
+            if (UpdateFlow.Pending != null) UpdateBannerText.Text = L.F("Có bản mới {0}", UpdateFlow.Pending.Version);
             VersionText.Text = L.F("Phiên bản {0}", AppInfo.Version);
             AdminText.Text = AppInfo.IsAdmin ? L.T("● Đang chạy quyền quản trị") : L.T("● Chưa có quyền quản trị");
         }
@@ -109,6 +110,19 @@ namespace BacSiMayTinh.UI
         // ================= Ủng hộ tác giả =================
         private void Donate_Click(object sender, RoutedEventArgs e) => Donate.Show();
         private void Feedback_Click(object sender, RoutedEventArgs e) => Feedback.Show();
+
+        // ================= Cập nhật =================
+        public void ShowUpdateBanner(string version)
+        {
+            if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(new Action(() => ShowUpdateBanner(version))); return; }
+            UpdateBannerText.Text = L.F("Có bản mới {0}", version);
+            UpdateBanner.Visibility = Visibility.Visible;
+        }
+
+        private async void UpdateBanner_Click(object sender, RoutedEventArgs e)
+        {
+            if (UpdateFlow.Pending != null) await UpdateFlow.OfferAsync(UpdateFlow.Pending);
+        }
 
         // ================= Điều hướng =================
         public void Navigate(string key)

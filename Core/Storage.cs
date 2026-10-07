@@ -1,4 +1,4 @@
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using Microsoft.Win32;
 
@@ -51,6 +51,8 @@ namespace BacSiMayTinh.Core
         [DataMember] public string Language { get; set; }
         [DataMember] public bool AcceptedTerms { get; set; }
         [DataMember] public bool TasksMigrated { get; set; }
+        [DataMember] public bool AutoCheckUpdate { get; set; }
+        [DataMember] public string LastUpdateCheck { get; set; }
 
         public AppSettings() => Defaults();
 
@@ -61,6 +63,7 @@ namespace BacSiMayTinh.Core
         {
             Theme = "dark";
             Language = "vi";
+            AutoCheckUpdate = true;
             AutoRestorePoint = true;
             AutoFreeRamThreshold = 85;
             AutoClean = "off";
