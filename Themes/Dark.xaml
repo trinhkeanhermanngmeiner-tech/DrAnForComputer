@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="B.Bg" Color="#0D141D"/>
+    <SolidColorBrush x:Key="B.Sidebar" Color="#0A1018"/>
+    <SolidColorBrush x:Key="B.Card" Color="#141E2A"/>
+    <SolidColorBrush x:Key="B.Card2" Color="#1B2735"/>
+    <SolidColorBrush x:Key="B.Hover" Color="#1F2D3D"/>
+    <SolidColorBrush x:Key="B.HoverOverlay" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="B.Border" Color="#243344"/>
+    <SolidColorBrush x:Key="B.Text" Color="#E8EEF5"/>
+    <SolidColorBrush x:Key="B.Text2" Color="#97A8BC"/>
+    <SolidColorBrush x:Key="B.Text3" Color="#5E7186"/>
+    <SolidColorBrush x:Key="B.Accent" Color="#14B88A"/>
+    <SolidColorBrush x:Key="B.Accent2" Color="#1A9BE0"/>
+    <SolidColorBrush x:Key="B.AccentSoft" Color="#2614B88A"/>
+    <LinearGradientBrush x:Key="B.AccentGrad" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#12B886" Offset="0"/>
+        <GradientStop Color="#1786D6" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="B.Input" Color="#0F1822"/>
+    <SolidColorBrush x:Key="B.Track" Color="#22303F"/>
+    <SolidColorBrush x:Key="B.Console" Color="#081018"/>
+    <SolidColorBrush x:Key="B.ConsoleText" Color="#9FE3C4"/>
+    <SolidColorBrush x:Key="B.Overlay" Color="#B3050A10"/>
+    <SolidColorBrush x:Key="B.Danger" Color="#F05252"/>
+    <SolidColorBrush x:Key="B.Warn" Color="#F5A524"/>
+    <SolidColorBrush x:Key="B.Ok" Color="#22C55E"/>
+    <SolidColorBrush x:Key="B.Info" Color="#3B9EFF"/>
+</ResourceDictionary>

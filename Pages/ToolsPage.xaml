@@ -1,0 +1,282 @@
+﻿<UserControl x:Class="BacSiMayTinh.Pages.ToolsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:BacSiMayTinh.Controls">
+    <UserControl.Resources>
+        <DataTemplate x:Key="TileTemplate">
+            <Button Click="Tile_Click" Margin="0,0,12,12" HorizontalContentAlignment="Stretch" Padding="16,14" Background="{DynamicResource B.Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Border Width="38" Height="38" CornerRadius="10" Background="{DynamicResource B.AccentSoft}" VerticalAlignment="Top">
+                        <TextBlock Text="{Binding Glyph}" Style="{StaticResource T.Icon}" Foreground="{DynamicResource B.Accent}" HorizontalAlignment="Center" FontSize="17"/>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                        <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Description}" Style="{StaticResource T.Muted}" TextWrapping="Wrap" TextTrimming="None" Margin="0,3,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="32,0,32,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="{c:T 'Tiện ích'}" Style="{StaticResource T.H1}"/>
+            <TextBlock Text="{c:T 'Các công cụ hữu ích: điểm khôi phục, tăng tốc chơi game, đổi DNS, xem mật khẩu Wi-Fi và nhiều hơn nữa.'}"
+                       Style="{StaticResource T.Sub}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource TabBar}" Margin="0,16,0,14">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton Style="{StaticResource TabItem}" GroupName="ToolTab" Content="{c:T 'Tiện ích nhanh'}" Tag="misc" Checked="Tab_Checked" IsChecked="True"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="ToolTab" Content="{c:T 'Tăng tốc game'}" Tag="game" Checked="Tab_Checked"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="ToolTab" Content="{c:T 'Mạng &amp; Wi-Fi'}" Tag="net" Checked="Tab_Checked"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="ToolTab" Content="{c:T 'Điểm khôi phục'}" Tag="restore" Checked="Tab_Checked"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="ToolTab" Content="{c:T 'Tiện ích trình duyệt'}" Tag="ext" Checked="Tab_Checked"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="ToolTab" Content="{c:T 'Tệp hosts'}" Tag="hosts" Checked="Tab_Checked"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <!-- ===== Tiện ích nhanh ===== -->
+            <ScrollViewer x:Name="MiscPanel" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="{c:T 'Công cụ hệ thống'}" Style="{StaticResource T.H3}" Margin="2,0,0,10"/>
+                    <ItemsControl x:Name="SystemTiles" ItemTemplate="{StaticResource TileTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><UniformGrid Columns="3"/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    <TextBlock Text="{c:T 'Mở nhanh công cụ có sẵn của Windows'}" Style="{StaticResource T.H3}" Margin="2,10,0,10"/>
+                    <ItemsControl x:Name="WindowsTiles" ItemTemplate="{StaticResource TileTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><UniformGrid Columns="3"/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===== Tăng tốc game ===== -->
+            <DockPanel x:Name="GamePanel" Visibility="Collapsed">
+                <Border DockPanel.Dock="Top" Style="{StaticResource Card}" Margin="0,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Width="52" Height="52" CornerRadius="14" Background="{DynamicResource B.AccentGrad}">
+                            <TextBlock Text="&#xE7FC;" Style="{StaticResource T.Icon}" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="GameTitle" Text="{c:T 'Tăng tốc chơi game'}" Style="{StaticResource T.H2}"/>
+                            <TextBlock x:Name="GameStatus" Style="{StaticResource T.Sub}" Margin="0,3,0,0"
+                                       Text="{c:T 'Đóng các ứng dụng chạy nền bạn chọn, dồn RAM trống và bật chế độ nguồn Hiệu suất cao trong lúc chơi. Bấm « Tắt » khi chơi xong để trở lại bình thường.'}"/>
+                        </StackPanel>
+                        <Button x:Name="GameBtn" Grid.Column="2" Style="{StaticResource Btn.Primary}" Height="42" MinWidth="150" Click="Game_Click" FontSize="14">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE945;" Style="{StaticResource T.Icon}" FontSize="14"/>
+                                <TextBlock x:Name="GameBtnText" Text="{c:T 'Bật tăng tốc'}" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+                <Grid DockPanel.Dock="Top" Margin="2,0,0,8">
+                    <TextBlock Text="{c:T 'Chọn ứng dụng sẽ được đóng khi bật tăng tốc (hãy lưu công việc trước):'}" Style="{StaticResource T.Sub}" VerticalAlignment="Center"/>
+                    <Button HorizontalAlignment="Right" Click="GameRefresh_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE72C;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                            <TextBlock Text="{c:T 'Làm mới'}" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <Border Style="{StaticResource Card}" Padding="6">
+                    <ListBox x:Name="ProcList" Style="{StaticResource PlainList}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Row}" Padding="12,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+                                        <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Title}" Style="{StaticResource T.Muted}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2" Text="{Binding MemoryText}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </DockPanel>
+
+            <!-- ===== Mạng & Wi-Fi ===== -->
+            <ScrollViewer x:Name="NetPanel" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel>
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="{c:T 'Đổi máy chủ DNS'}" Style="{StaticResource T.H3}"/>
+                            <TextBlock Text="{c:T 'DNS tốt giúp vào web nhanh, ổn định hơn và có thể chặn trang lừa đảo. Áp dụng cho tất cả card mạng đang kết nối.'}"
+                                       Style="{StaticResource T.Sub}" Margin="0,4,0,12"/>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox x:Name="DnsBox" Width="300" SelectionChanged="Dns_Changed"/>
+                                <Button Content="{c:T 'Áp dụng'}" Style="{StaticResource Btn.Primary}" Margin="10,0,0,0" Click="DnsApply_Click" MinWidth="100"/>
+                            </StackPanel>
+                            <TextBlock x:Name="DnsDesc" Style="{StaticResource T.Muted}" Margin="0,8,0,0"/>
+                            <TextBlock x:Name="DnsCurrent" Style="{StaticResource T.Muted}" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid>
+                                <StackPanel Margin="0,0,200,0">
+                                    <TextBlock Text="{c:T 'Mật khẩu Wi-Fi đã lưu'}" Style="{StaticResource T.H3}"/>
+                                    <TextBlock Text="{c:T 'Xem lại mật khẩu các mạng Wi-Fi máy đã từng kết nối – tiện khi cần kết nối thêm điện thoại.'}"
+                                               Style="{StaticResource T.Sub}" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Center" Content="{c:T 'Hiện mật khẩu'}" Click="Wifi_Click"/>
+                            </Grid>
+                            <ItemsControl x:Name="WifiList" Margin="0,10,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource Row}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="&#xE701;" Style="{StaticResource T.Icon}" Foreground="{DynamicResource B.Accent}"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Ssid}" FontWeight="SemiBold" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding PasswordText}" FontFamily="Consolas" FontSize="13.5" VerticalAlignment="Center"/>
+                                                <Button Grid.Column="3" Style="{StaticResource Btn.Icon}" Content="&#xE8C8;" ToolTip="{c:T 'Sao chép mật khẩu'}" Click="WifiCopy_Click"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===== Điểm khôi phục ===== -->
+            <DockPanel x:Name="RestorePanel" Visibility="Collapsed">
+                <Grid DockPanel.Dock="Top" Margin="2,0,0,10">
+                    <TextBlock Style="{StaticResource T.Sub}" VerticalAlignment="Center" Margin="0,0,420,0"
+                               Text="{c:T 'Điểm khôi phục giúp đưa Windows về trạng thái trước đó khi có sự cố. Dữ liệu cá nhân không bị ảnh hưởng.'}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="{c:T 'Mở Khôi phục hệ thống'}" Click="OpenRestore_Click"/>
+                        <Button Style="{StaticResource Btn.Primary}" Margin="8,0,0,0" Click="CreateRestore_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE710;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                                <TextBlock Text="{c:T 'Tạo điểm khôi phục'}" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <Border Style="{StaticResource Card}" Padding="6">
+                    <DockPanel>
+                        <TextBlock x:Name="RestoreEmpty" DockPanel.Dock="Top" Style="{StaticResource T.Sub}" Margin="12,8" Visibility="Collapsed"
+                                   Text="{c:T 'Chưa có điểm khôi phục nào. Hãy tạo một điểm khôi phục để an toàn hơn.'}"/>
+                        <ListBox x:Name="RestoreList" Style="{StaticResource PlainList}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Row}" Padding="12,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="&#xE777;" Style="{StaticResource T.Icon}" Foreground="{DynamicResource B.Accent}"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Description}" Margin="12,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding CreatedText}" Style="{StaticResource T.Muted}" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Border>
+            </DockPanel>
+
+            <!-- ===== Tiện ích trình duyệt ===== -->
+            <DockPanel x:Name="ExtPanel" Visibility="Collapsed">
+                <Grid DockPanel.Dock="Top" Margin="2,0,0,10">
+                    <TextBlock x:Name="ExtSummary" Style="{StaticResource T.Sub}" VerticalAlignment="Center" Margin="0,0,140,0"
+                               Text="{c:T 'Đang tải…'}"/>
+                    <Button HorizontalAlignment="Right" Click="ExtRefresh_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE72C;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                            <TextBlock Text="{c:T 'Làm mới'}" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <Border Style="{StaticResource Card}" Padding="6">
+                    <ListBox x:Name="ExtList" Style="{StaticResource PlainList}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Row}" Padding="12,9">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource B.Card2}">
+                                            <TextBlock Text="&#xEA86;" Style="{StaticResource T.Icon}" HorizontalAlignment="Center" Foreground="{DynamicResource B.Text2}"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="14,0,12,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                <Border Style="{StaticResource Badge}" Background="#26E8A317" Margin="8,0,0,0" Visibility="{Binding Risky, Converter={StaticResource BoolVis}}">
+                                                    <TextBlock Text="{Binding RiskText}" FontSize="10.5" FontWeight="SemiBold" Foreground="#E8A317"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Detail}" Style="{StaticResource T.Muted}" Margin="0,1,0,0"/>
+                                            <TextBlock Text="{Binding Description}" Style="{StaticResource T.Muted}" Margin="0,1,0,0"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button Style="{StaticResource Btn.Icon}" Content="&#xE8DA;" ToolTip="{c:T 'Mở thư mục tiện ích'}" Click="ExtFolder_Click"/>
+                                            <Button Content="{c:T 'Quản lý'}" Margin="6,0,0,0" Click="ExtManage_Click" ToolTip="{c:T 'Mở trang quản lý tiện ích của trình duyệt để tắt/gỡ'}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </DockPanel>
+
+            <!-- ===== Tệp hosts ===== -->
+            <DockPanel x:Name="HostsPanel" Visibility="Collapsed">
+                <Grid DockPanel.Dock="Top" Margin="2,0,0,10">
+                    <TextBlock Style="{StaticResource T.Sub}" VerticalAlignment="Center" Margin="0,0,380,0"
+                               Text="{c:T 'Tệp hosts dùng để chặn hoặc chuyển hướng tên miền. Virus/phần mềm crack hay sửa tệp này. Bản cũ luôn được sao lưu trước khi lưu.'}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="{c:T 'Tải lại'}" Click="HostsReload_Click"/>
+                        <Button Content="{c:T 'Khôi phục mặc định'}" Margin="8,0,0,0" Click="HostsDefault_Click"/>
+                        <Button Content="{c:T 'Lưu'}" Style="{StaticResource Btn.Primary}" Margin="8,0,0,0" MinWidth="80" Click="HostsSave_Click"/>
+                    </StackPanel>
+                </Grid>
+                <TextBox x:Name="HostsText" AcceptsReturn="True" AcceptsTab="True" FontFamily="Consolas" FontSize="13"
+                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalContentAlignment="Top" Padding="12"/>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>

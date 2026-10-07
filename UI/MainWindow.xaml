@@ -1,0 +1,128 @@
+﻿<Window x:Class="BacSiMayTinh.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:BacSiMayTinh.Controls"
+        Title="DrAn For Computer – BS. Trịnh Kế An"
+        Width="1200" Height="780" MinWidth="1000" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource B.Bg}"
+        Foreground="{DynamicResource B.Text}"
+        FontFamily="{StaticResource UiFont}" FontSize="13"
+        Icon="/Assets/app.ico"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="38" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Grid x:Name="Root">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="236"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== Thanh menu bên trái ===== -->
+        <Border Background="{DynamicResource B.Sidebar}" BorderBrush="{DynamicResource B.Border}" BorderThickness="0,0,1,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="14,18,14,8">
+                    <StackPanel Orientation="Horizontal" Margin="6,0,0,0">
+                        <Image Source="/Assets/logo.png" Width="40" Height="40" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <StackPanel Margin="11,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="DrAn For Computer" FontSize="15.5" FontWeight="Bold"/>
+                            <TextBlock Text="BS. Trịnh Kế An" FontSize="11.5" Foreground="{DynamicResource B.Accent}" Margin="0,1,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <!-- Thẻ ủng hộ tác giả: ngay dưới tên tác giả -->
+                    <Button Margin="0,12,0,0" Padding="12,9" HorizontalContentAlignment="Stretch" Click="Donate_Click"
+                            Background="{DynamicResource B.AccentSoft}" BorderBrush="{DynamicResource B.Accent}"
+                            ToolTip="{c:T 'Bấm để xem mã QR chuyển khoản'}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xEB51;" Style="{StaticResource T.Icon}" FontSize="14" Foreground="#EF4B4B"/>
+                                <TextBlock Text="{c:T 'Ủng hộ tác giả'}" FontWeight="SemiBold" Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{c:T 'Ngân hàng Bản Việt'}" Style="{StaticResource T.Muted}" Margin="0,5,0,0"/>
+                            <Grid Margin="0,1,0,0">
+                                <TextBlock FontWeight="SemiBold" FontSize="12.5"><Run Text="{c:T 'STK:'}"/><Run Text=" 9021642814421"/></TextBlock>
+                                <TextBlock Text="&#xE8C8;" Style="{StaticResource T.Icon}" FontSize="12" HorizontalAlignment="Right" Foreground="{DynamicResource B.Text2}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom" Margin="20,10,20,18">
+                    <Border Style="{StaticResource Badge}" Background="{DynamicResource B.AccentSoft}" Margin="0,0,0,8">
+                        <TextBlock Text="{c:T 'BẢN MIỄN PHÍ'}" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource B.Accent}"/>
+                    </Border>
+                    <TextBlock x:Name="VersionText" Style="{StaticResource T.Muted}"/>
+                    <TextBlock x:Name="AdminText" Style="{StaticResource T.Muted}" Margin="0,2,0,0"/>
+                    <Button Style="{StaticResource Btn.Link}" HorizontalAlignment="Left" Margin="0,8,0,0" Click="Feedback_Click" ToolTip="bstrinhkean@gmail.com">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE715;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                            <TextBlock Text="{c:T 'Báo lỗi / Góp ý'}" Margin="6,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="Nav">
+                        <TextBlock Text="{c:T 'CHĂM SÓC'}" Style="{StaticResource T.Muted}" FontWeight="SemiBold" Margin="26,4,0,6"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Tổng quan'}" Tag="&#xE80F;" CommandParameter="dashboard" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Dọn rác'}" Tag="&#xE74D;" CommandParameter="cleaner" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Tối ưu hệ thống'}" Tag="&#xEC4A;" CommandParameter="optimizer" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Sửa lỗi Windows'}" Tag="&#xE90F;" CommandParameter="repair" Checked="Nav_Checked"/>
+                        <TextBlock Text="{c:T 'CÔNG CỤ'}" Style="{StaticResource T.Muted}" FontWeight="SemiBold" Margin="26,16,0,6"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Thông tin máy'}" Tag="&#xE7F8;" CommandParameter="sysinfo" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Phần mềm'}" Tag="&#xE7B8;" CommandParameter="uninstall" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Phân tích ổ đĩa'}" Tag="&#xEDA2;" CommandParameter="disk" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Tiện ích'}" Tag="&#xEC7A;" CommandParameter="tools" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Cài đặt'}" Tag="&#xE713;" CommandParameter="settings" Checked="Nav_Checked"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- ===== Nội dung ===== -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="38"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Border Style="{StaticResource TabBar}" Padding="2" Margin="0,5,10,0" VerticalAlignment="Top" WindowChrome.IsHitTestVisibleInChrome="True"
+                        ToolTip="{c:T 'Ngôn ngữ / Language'}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE774;" Style="{StaticResource T.Icon}" FontSize="12" Foreground="{DynamicResource B.Text2}" Margin="8,0,4,0"/>
+                        <RadioButton x:Name="LangVi" Style="{StaticResource TabItem}" GroupName="Lang" Content="VI" Padding="10,3" FontSize="12" Checked="Lang_Checked"/>
+                        <RadioButton x:Name="LangEn" Style="{StaticResource TabItem}" GroupName="Lang" Content="EN" Padding="10,3" FontSize="12" Checked="Lang_Checked"/>
+                    </StackPanel>
+                </Border>
+                <Button Style="{StaticResource TitleBtn}" Content="&#xE921;" Click="Min_Click" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{c:T 'Thu nhỏ'}"/>
+                <Button x:Name="MaxBtn" Style="{StaticResource TitleBtn}" Content="&#xE922;" Click="Max_Click" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{c:T 'Phóng to'}"/>
+                <Button Style="{StaticResource TitleBtn.Close}" Content="&#xE8BB;" Click="Close_Click" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{c:T 'Đóng'}"/>
+            </StackPanel>
+            <ContentControl x:Name="PageHost" Grid.Row="1" Focusable="False"/>
+        </Grid>
+
+        <!-- ===== Lớp phủ ===== -->
+        <Border x:Name="DimOverlay" Grid.ColumnSpan="2" Background="{DynamicResource B.Overlay}" Visibility="Collapsed"/>
+
+        <Grid x:Name="BusyOverlay" Grid.ColumnSpan="2" Background="{DynamicResource B.Overlay}" Visibility="Collapsed">
+            <Border Style="{StaticResource Card}" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="28,22" MaxWidth="480">
+                <StackPanel Orientation="Horizontal">
+                    <c:Spinner VerticalAlignment="Center"/>
+                    <TextBlock x:Name="BusyText" Margin="18,0,0,0" VerticalAlignment="Center" Style="{StaticResource T.Body}" MaxWidth="360" LineHeight="20"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Border x:Name="ToastBox" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,26"
+                CornerRadius="10" Padding="16,11" Background="{DynamicResource B.Card2}" BorderBrush="{DynamicResource B.Border}"
+                BorderThickness="1" Visibility="Collapsed" MaxWidth="600" IsHitTestVisible="False">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="ToastIcon" Style="{StaticResource T.Icon}" FontSize="16"/>
+                <TextBlock x:Name="ToastText" Margin="10,0,0,0" TextWrapping="Wrap" MaxWidth="530" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

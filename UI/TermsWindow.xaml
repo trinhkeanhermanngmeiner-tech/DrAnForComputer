@@ -1,0 +1,50 @@
+<Window x:Class="BacSiMayTinh.UI.TermsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:BacSiMayTinh.Controls"
+        Title="DrAn For Computer"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="NoResize" Width="640" Height="640"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="{StaticResource UiFont}" FontSize="13"
+        Foreground="{DynamicResource B.Text}"
+        Icon="/Assets/app.ico"
+        TextOptions.TextFormattingMode="Display">
+    <Border Margin="16" Style="{StaticResource Card}" Padding="26,22">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="26" ShadowDepth="5" Opacity="0.35" Color="Black"/>
+        </Border.Effect>
+        <DockPanel>
+            <Grid DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Assets/logo.png" Width="42" Height="42" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="DrAn For Computer" FontSize="17" FontWeight="Bold"/>
+                        <TextBlock Text="{c:T 'Điều khoản sử dụng'}" Style="{StaticResource T.Sub}"/>
+                    </StackPanel>
+                </StackPanel>
+                <Border Style="{StaticResource TabBar}" Padding="2" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="LangVi" Style="{StaticResource TabItem}" GroupName="TLang" Content="VI" Padding="10,3" FontSize="12" Checked="Lang_Checked"/>
+                        <RadioButton x:Name="LangEn" Style="{StaticResource TabItem}" GroupName="TLang" Content="EN" Padding="10,3" FontSize="12" Checked="Lang_Checked"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <StackPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+                <CheckBox x:Name="AgreeBox" Content="{c:T 'Tôi đã đọc và đồng ý với các điều khoản trên'}" Click="Agree_Click"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                    <Button x:Name="ExitBtn" Content="{c:T 'Thoát'}" MinWidth="96" Click="Exit_Click"/>
+                    <Button x:Name="AcceptBtn" Content="{c:T 'Tôi đồng ý'}" MinWidth="120" Margin="8,0,0,0" Style="{StaticResource Btn.Primary}"
+                            IsEnabled="False" Click="Accept_Click"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Border CornerRadius="10" Background="{DynamicResource B.Card2}" Margin="0,18,0,0" Padding="4">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="TermsText" TextWrapping="Wrap" LineHeight="21" Margin="14,10" FontSize="13"/>
+                </ScrollViewer>
+            </Border>
+        </DockPanel>
+    </Border>
+</Window>

@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="BacSiMayTinh.Pages.RepairPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:BacSiMayTinh.Controls">
+    <Grid Margin="32,0,32,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="0,0,0,16">
+            <TextBlock Text="{c:T 'Sửa lỗi Windows'}" Style="{StaticResource T.H1}"/>
+            <TextBlock Text="{c:T 'Chọn đúng triệu chứng máy bạn gặp phải, Bác sĩ sẽ tự động chữa. Các thao tác có rủi ro sẽ tạo điểm khôi phục trước.'}"
+                       Style="{StaticResource T.Sub}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" x:Name="CardScroll">
+            <ItemsControl x:Name="FixList">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid x:Name="FixGrid" Columns="2" Loaded="FixGrid_Loaded"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource Card}" Margin="0,0,12,12" Padding="18,16">
+                            <DockPanel>
+                                <Grid DockPanel.Dock="Top">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="40" Height="40" CornerRadius="11" Background="{DynamicResource B.AccentSoft}" VerticalAlignment="Top">
+                                        <TextBlock Text="{Binding Glyph}" Style="{StaticResource T.Icon}" FontSize="18" Foreground="{DynamicResource B.Accent}" HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                        <TextBlock Text="{Binding Title}" Style="{StaticResource T.H3}" TextWrapping="Wrap"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                            <Border Style="{StaticResource Badge}" Background="{Binding RiskBg}">
+                                                <TextBlock Text="{Binding RiskText}" FontSize="10.5" FontWeight="SemiBold" Foreground="{Binding RiskFg}"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Meta}" Style="{StaticResource T.Muted}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid DockPanel.Dock="Bottom" Margin="0,12,0,0">
+                                    <TextBlock Text="{Binding State}" Foreground="{Binding StateBrush}" FontSize="12" VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis" Margin="0,0,200,0"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <ComboBox Width="150" ItemsSource="{Binding Drives}" SelectedItem="{Binding SelectedDrive, Mode=TwoWay}" Margin="0,0,8,0"
+                                                  Visibility="{Binding NeedsDrive, Converter={StaticResource BoolVis}}" DropDownOpened="Drive_DropDownOpened"/>
+                                        <Button Content="{c:T 'Sửa ngay'}" Style="{StaticResource Btn.Primary}" Padding="16,7" Click="Fix_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Text="{Binding Description}" Style="{StaticResource T.Sub}" Margin="0,10,0,0"/>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Nhật ký -->
+        <Border x:Name="ConsolePanel" Grid.Row="2" CornerRadius="12" Background="{DynamicResource B.Console}" Margin="0,8,12,0" Visibility="Collapsed"
+                BorderBrush="{DynamicResource B.Border}" BorderThickness="1">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top" Margin="14,10,10,4">
+                    <StackPanel Orientation="Horizontal">
+                        <c:Spinner x:Name="RunSpinner" Visibility="Collapsed" VerticalAlignment="Center">
+                            <c:Spinner.LayoutTransform>
+                                <ScaleTransform ScaleX="0.45" ScaleY="0.45"/>
+                            </c:Spinner.LayoutTransform>
+                        </c:Spinner>
+                        <TextBlock x:Name="ConsoleTitle" Text="{c:T 'Nhật ký thực hiện'}" Foreground="#E8EEF5" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="ProgressLine" Foreground="#97A8BC" Margin="12,0,0,0" FontFamily="Consolas" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource Btn.Icon}" Content="&#xE8C8;" Foreground="#97A8BC" ToolTip="{c:T 'Sao chép nhật ký'}" Click="Copy_Click"/>
+                        <Button x:Name="HideConsoleBtn" Style="{StaticResource Btn.Icon}" Content="&#xE711;" Foreground="#97A8BC" ToolTip="{c:T 'Ẩn'}" Click="HideConsole_Click"/>
+                    </StackPanel>
+                </Grid>
+                <TextBox x:Name="ConsoleText" Height="190" IsReadOnly="True" Background="Transparent" BorderThickness="0"
+                         Foreground="{DynamicResource B.ConsoleText}" FontFamily="Consolas" FontSize="12" Padding="8,0,8,8"
+                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

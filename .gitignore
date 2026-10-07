@@ -1,0 +1,9 @@
+# Kết quả build
+bin/
+obj/
+*.user
+.vs/
+*.suo
+
+# Bản phát hành (đưa lên GitHub Releases, không đưa vào mã nguồn)
+*.zip

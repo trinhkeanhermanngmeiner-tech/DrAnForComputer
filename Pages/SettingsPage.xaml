@@ -1,0 +1,225 @@
+﻿<UserControl x:Class="BacSiMayTinh.Pages.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:BacSiMayTinh.Controls">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="32,0,32,28">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="360"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="{c:T 'Cài đặt'}" Style="{StaticResource T.H1}"/>
+                <TextBlock Text="{c:T 'Tùy chỉnh giao diện và cách DrAn For Computer hoạt động.'}" Style="{StaticResource T.Sub}" Margin="0,4,0,18"/>
+
+                <!-- Giao diện -->
+                <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="{c:T 'Giao diện'}" Style="{StaticResource T.H3}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,200,0">
+                                <TextBlock Text="{c:T 'Ngôn ngữ'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Đổi ngay không cần khởi động lại. Cũng có nút đổi nhanh trên thanh tiêu đề.'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Style="{StaticResource TabBar}" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="LangVi" Style="{StaticResource TabItem}" GroupName="SLang" Content="Tiếng Việt" Checked="Lang_Checked" Padding="14,6"/>
+                                    <RadioButton x:Name="LangEn" Style="{StaticResource TabItem}" GroupName="SLang" Content="English" Checked="Lang_Checked" Padding="14,6"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,200,0">
+                                <TextBlock Text="{c:T 'Chủ đề màu'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Giao diện tối dịu mắt, giao diện sáng dễ đọc ban ngày.'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Style="{StaticResource TabBar}" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="ThemeDark" Style="{StaticResource TabItem}" GroupName="Theme" Content="{c:T 'Tối'}" Checked="Theme_Checked" Padding="18,6"/>
+                                    <RadioButton x:Name="ThemeLight" Style="{StaticResource TabItem}" GroupName="Theme" Content="{c:T 'Sáng'}" Checked="Theme_Checked" Padding="18,6"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        <Grid>
+                            <StackPanel Margin="0,0,80,0">
+                                <TextBlock Text="{c:T 'Giảm hiệu ứng chuyển động'}" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="EffectsHint" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ReduceEffects" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="Setting_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- An toàn -->
+                <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="{c:T 'An toàn &amp; hoàn tác'}" Style="{StaticResource T.H3}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,80,0">
+                                <TextBlock Text="{c:T 'Tự tạo điểm khôi phục trước khi tối ưu'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Tạo một điểm khôi phục hệ thống trước thay đổi đầu tiên trong mỗi lần mở ứng dụng. Rất nên bật.'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <CheckBox x:Name="AutoRestore" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="Setting_Click"/>
+                        </Grid>
+                        <Grid>
+                            <StackPanel Margin="0,0,220,0">
+                                <TextBlock Text="{c:T 'Hoàn tác mọi thay đổi'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Đưa tất cả tinh chỉnh và dịch vụ về như trước khi dùng DrAn For Computer.'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center" Content="{c:T 'Đi tới Tối ưu hệ thống'}" Click="GoOptimizer_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Chạy nền -->
+                <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="{c:T 'Chạy nền &amp; tự động'}" Style="{StaticResource T.H3}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,80,0">
+                                <TextBlock Text="{c:T 'Khởi động cùng Windows (chạy ẩn dưới khay)'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Dùng Task Scheduler nên không hiện hộp thoại UAC mỗi lần bật máy. Chỉ tốn khoảng 30 MB RAM.'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <CheckBox x:Name="StartWithWindows" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="Setting_Click"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,80,0">
+                                <TextBlock Text="{c:T 'Thu nhỏ xuống khay hệ thống khi đóng'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Bấm nút X sẽ ẩn cửa sổ thay vì thoát hẳn.'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <CheckBox x:Name="MinimizeToTray" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="Setting_Click"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,80,0">
+                                <TextBlock Text="{c:T 'Tự giải phóng RAM khi gần đầy'}" FontWeight="SemiBold"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                    <TextBlock Text="{c:T 'Khi RAM sử dụng vượt'}" Style="{StaticResource T.Muted}" VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="RamThreshold" Width="80" Margin="8,0,8,0" SelectionChanged="RamThreshold_Changed">
+                                        <ComboBoxItem Content="75%" Tag="75"/>
+                                        <ComboBoxItem Content="80%" Tag="80"/>
+                                        <ComboBoxItem Content="85%" Tag="85"/>
+                                        <ComboBoxItem Content="90%" Tag="90"/>
+                                    </ComboBox>
+                                    <TextBlock Text="{c:T '(cần chạy dưới khay)'}" Style="{StaticResource T.Muted}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <CheckBox x:Name="AutoFreeRam" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="Setting_Click"/>
+                        </Grid>
+                        <Grid>
+                            <StackPanel Margin="0,0,200,0">
+                                <TextBlock Text="{c:T 'Dọn rác tự động theo lịch'}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{c:T 'Tự dọn các mục an toàn lúc 12:00 (kể cả khi ứng dụng đang tắt).'}" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <ComboBox x:Name="AutoClean" Width="170" HorizontalAlignment="Right" VerticalAlignment="Center" SelectionChanged="AutoClean_Changed">
+                                <ComboBoxItem Content="{c:T 'Tắt'}" Tag="off"/>
+                                <ComboBoxItem Content="{c:T 'Hằng ngày'}" Tag="daily"/>
+                                <ComboBoxItem Content="{c:T 'Hằng tuần (Chủ nhật)'}" Tag="weekly"/>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Cài đặt vào máy -->
+                <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="{c:T 'Cài đặt &amp; cập nhật'}" Style="{StaticResource T.H3}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,12">
+                            <StackPanel Margin="0,0,240,0">
+                                <TextBlock x:Name="InstallTitle" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="InstallHint" Style="{StaticResource T.Muted}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <Button x:Name="InstallBtn" Style="{StaticResource Btn.Primary}" Click="Install_Click"/>
+                                <Button x:Name="UninstallBtn" Content="{c:T 'Gỡ cài đặt'}" Margin="8,0,0,0" Click="Uninstall_Click"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid x:Name="UpdateRow">
+                            <StackPanel Margin="0,0,200,0">
+                                <TextBlock Text="{c:T 'Kiểm tra phiên bản mới'}" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="UpdateHint" Style="{StaticResource T.Muted}" TextWrapping="Wrap"
+                                           Text="{c:T 'Chỉ tải một tệp thông tin phiên bản nhỏ, không gửi dữ liệu gì.'}"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center" Content="{c:T 'Kiểm tra cập nhật'}" Click="CheckUpdate_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Dữ liệu -->
+                <Border Style="{StaticResource Card}">
+                    <Grid>
+                        <StackPanel Margin="0,0,220,0">
+                            <TextBlock Text="{c:T 'Nhật ký &amp; sao lưu'}" Style="{StaticResource T.H3}"/>
+                            <TextBlock x:Name="DataPath" Style="{StaticResource T.Muted}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button HorizontalAlignment="Right" VerticalAlignment="Center" Content="{c:T 'Mở thư mục'}" Click="OpenData_Click"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <!-- Giới thiệu -->
+            <Border Grid.Column="2" Style="{StaticResource Card}" VerticalAlignment="Top" Margin="0,62,0,0" Padding="0" ClipToBounds="True">
+                <StackPanel>
+                    <Border Background="{DynamicResource B.AccentGrad}" CornerRadius="12,12,0,0" Padding="24,26">
+                        <StackPanel HorizontalAlignment="Center">
+                            <Border Width="84" Height="84" CornerRadius="22" Background="#33FFFFFF" HorizontalAlignment="Center">
+                                <Image Source="/Assets/logo.png" Width="64" Height="64" RenderOptions.BitmapScalingMode="HighQuality"/>
+                            </Border>
+                            <TextBlock Text="DrAn For Computer" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,14,0,0"/>
+                            <TextBlock x:Name="SloganText" Foreground="#E6FFFFFF" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Margin="24,18,24,22">
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="{c:T 'Tác giả'}" Foreground="{DynamicResource B.Text2}"/>
+                            <TextBlock Text="BS. Trịnh Kế An" FontWeight="Bold" Foreground="{DynamicResource B.Accent}" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="{c:T 'Phiên bản'}" Foreground="{DynamicResource B.Text2}"/>
+                            <TextBlock x:Name="AboutVersion" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="{c:T 'Giấy phép'}" Foreground="{DynamicResource B.Text2}"/>
+                            <TextBlock Text="{c:T 'Miễn phí'}" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="{c:T 'Hệ điều hành'}" Foreground="{DynamicResource B.Text2}"/>
+                            <TextBlock x:Name="AboutOs" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Border Height="1" Background="{DynamicResource B.Border}" Margin="0,8,0,14"/>
+                        <TextBlock Style="{StaticResource T.Sub}" LineHeight="19"
+                                   Text="{c:T 'Phần mềm tối ưu, dọn dẹp và sửa lỗi Windows, được thiết kế nhẹ nhàng để chạy mượt cả trên máy cấu hình yếu. Không quảng cáo, không thu thập dữ liệu, mọi thay đổi đều có thể hoàn tác.'}"/>
+
+                        <!-- Ủng hộ -->
+                        <Border CornerRadius="10" Background="{DynamicResource B.AccentSoft}" Padding="14,12" Margin="0,16,0,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xEB51;" Style="{StaticResource T.Icon}" FontSize="14" Foreground="#EF4B4B"/>
+                                    <TextBlock Text="{c:T 'Ủng hộ tác giả'}" FontWeight="SemiBold" Margin="8,0,0,0"/>
+                                </StackPanel>
+                                <TextBlock x:Name="AboutBank" Style="{StaticResource T.Muted}" Margin="0,6,0,0"/>
+                                <TextBlock Text="9021642814421" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource B.Accent}" Margin="0,2,0,8"/>
+                                <Button Content="{c:T 'Xem mã QR chuyển khoản'}" Style="{StaticResource Btn.Primary}" Click="Donate_Click"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Báo lỗi & góp ý -->
+                        <Border CornerRadius="10" Background="{DynamicResource B.Card2}" Padding="14,12" Margin="0,12,0,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE715;" Style="{StaticResource T.Icon}" FontSize="14" Foreground="{DynamicResource B.Accent}"/>
+                                    <TextBlock Text="{c:T 'Báo lỗi &amp; góp ý tính năng'}" FontWeight="SemiBold" Margin="8,0,0,0"/>
+                                </StackPanel>
+                                <TextBlock Text="bstrinhkean@gmail.com" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource B.Accent}" Margin="0,6,0,8"/>
+                                <Button Content="{c:T 'Gửi báo lỗi / góp ý'}" Click="Feedback_Click"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Button Style="{StaticResource Btn.Link}" HorizontalAlignment="Center" Margin="0,14,0,0" Content="{c:T 'Xem điều khoản sử dụng'}" Click="Terms_Click"/>
+                        <TextBlock Style="{StaticResource T.Muted}" Margin="0,8,0,0" HorizontalAlignment="Center" Text="© 2026 BS. Trịnh Kế An"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
