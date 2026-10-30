@@ -53,11 +53,13 @@
                 </Border>
 
                 <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="SearchBox" Width="230" TextChanged="Search_Changed" ToolTip="{c:T 'Tìm theo tên thiết bị, hãng…'}"/>
-                        <CheckBox x:Name="InboxBox" Content="{c:T 'Hiện cả driver có sẵn của Windows'}" Margin="14,0,0,0" VerticalAlignment="Center" Click="Inbox_Click"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="InstalledSummary" Style="{StaticResource T.Sub}" Margin="2,0,16,0" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <Grid Grid.Column="1">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Click="InstallFolder_Click" ToolTip="{c:T 'Nạp và cài driver từ thư mục sao lưu hoặc thư mục driver tải từ trang hãng'}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE777;" Style="{StaticResource T.Icon}" FontSize="12"/>
@@ -74,9 +76,14 @@
                             </StackPanel>
                         </Button>
                     </StackPanel>
+                    </Grid>
                 </Grid>
 
-                <TextBlock x:Name="InstalledSummary" DockPanel.Dock="Top" Style="{StaticResource T.Sub}" Margin="2,0,0,8"/>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="&#xE721;" Style="{StaticResource T.Icon}" FontSize="13" Foreground="{DynamicResource B.Text2}" VerticalAlignment="Center" Margin="2,0,8,0"/>
+                    <TextBox x:Name="SearchBox" Width="260" TextChanged="Search_Changed" ToolTip="{c:T 'Tìm theo tên thiết bị, hãng…'}"/>
+                    <CheckBox x:Name="InboxBox" Content="{c:T 'Hiện cả driver có sẵn của Windows'}" Margin="14,0,0,0" VerticalAlignment="Center" Click="Inbox_Click"/>
+                </StackPanel>
 
                 <Border Style="{StaticResource Card}" Padding="6">
                     <ListBox x:Name="DriverList" Style="{StaticResource PlainList}" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel">

@@ -347,8 +347,8 @@
             d["Quay lại bản cũ"] = "Roll back";
             d["Mở thư mục sao lưu driver cũ"] = "Open the old driver backup folder";
             d["Đang đọc danh sách driver…"] = "Reading the driver list…";
-            d["{0} thiết bị đang gặp sự cố hoặc thiếu driver"] = "{0} devices have problems or missing drivers";
-            d["{0} thiết bị dùng driver của hãng thứ ba, {1} dùng driver có sẵn của Windows."] = "{0} devices use third-party drivers, {1} use Windows built-in drivers.";
+            d["{0} thiết bị đang gặp sự cố hoặc thiếu driver"] = "{0} device(s) with problems or missing drivers";
+            d["{0} thiết bị dùng driver của hãng thứ ba, {1} dùng driver có sẵn của Windows."] = "{0} device(s) use third-party drivers, {1} use Windows built-in drivers.";
             d[" {0} driver đã hơn 5 năm tuổi – nên kiểm tra bản mới."] = " {0} drivers are over 5 years old – worth checking for updates.";
             d["Đã sao lưu {0} gói driver vào {1}"] = "Backed up {0} driver packages to {1}";
             d["Hãy tích chọn driver muốn sao lưu (driver có sẵn của Windows không cần sao lưu)."] = "Tick the drivers you want to back up (Windows built-in drivers don't need backing up).";
@@ -430,8 +430,8 @@
             d["{0} tuần"] = "{0} weeks";
             d["Đọc trạng thái diệt virus, tường lửa, UAC, Windows Update…"] = "Reading antivirus, firewall, UAC and Windows Update status…";
             d["Không kiểm tra được"] = "Couldn't run the check";
-            d["{0} vấn đề nguy hiểm cần xử lý ngay"] = "{0} dangerous issues need fixing now";
-            d["Khá an toàn – còn {0} mục nên sửa"] = "Fairly safe – {0} items worth fixing";
+            d["{0} vấn đề nguy hiểm cần xử lý ngay"] = "{0} dangerous issue(s) to fix now";
+            d["Khá an toàn – còn {0} mục nên sửa"] = "Fairly safe – {0} item(s) worth fixing";
             d["Máy của bạn được bảo vệ tốt"] = "Your PC is well protected";
             d["{0}/{1} mục đạt. Các thay đổi đều được tự sao lưu trước và có thể phục hồi trong « Sao lưu & Phục hồi »."] = "{0}/{1} items pass. Changes are backed up first and can be restored in « Backup & Restore ».";
             d["Tắt SMBv1?"] = "Turn off SMBv1?";
@@ -481,8 +481,8 @@
             d["BẢO VỆ"] = "PROTECT";
             d["Chụp lại tinh chỉnh Windows, dịch vụ, driver, dữ liệu cá nhân để quay về khi cần."] = "Snapshot Windows tweaks, services, drivers and personal data to go back when needed.";
             d["Tìm driver mới qua Windows Update, có sao lưu và quay lại bản cũ."] = "Find new drivers via Windows Update, with backup and rollback.";
-            d["{0} thiết bị chưa có driver"] = "{0} devices have no driver";
-            d["{0} thiết bị đang báo lỗi driver"] = "{0} devices report driver errors";
+            d["{0} thiết bị chưa có driver"] = "{0} device(s) without a driver";
+            d["{0} thiết bị đang báo lỗi driver"] = "{0} device(s) reporting driver errors";
             d["Thiết bị thiếu driver có thể không hoạt động (Wi-Fi, âm thanh, card màn hình…). Tìm driver qua Windows Update."] = "Devices without drivers may not work (Wi-Fi, sound, graphics…). Find drivers via Windows Update.";
             d["Đã {0:0} ngày chưa sao lưu cấu hình"] = "Settings not backed up for {0:0} days";
             d["Chưa có bản sao lưu cấu hình Windows"] = "No Windows settings backup yet";

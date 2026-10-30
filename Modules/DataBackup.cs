@@ -232,7 +232,7 @@ namespace BacSiMayTinh.Modules
             }
             var errRx = new Regex(@"\(0x[0-9A-Fa-f]{8}\)");
             var sample = new StringBuilder();
-            var r = await ProcessRunner.RunAsync(Robocopy, sb.ToString(), (line, p) =>
+            var r = await RunRobocopy(sb.ToString(), (line, p) =>
             {
                 if (sample.Length < 600) lock (sample) sample.Append(line.Replace('\t', '|')).Append(" // ");
                 if (errRx.IsMatch(line)) { Interlocked.Increment(ref prog.Errors); return; }
@@ -244,11 +244,15 @@ namespace BacSiMayTinh.Modules
                     prog.Current = parts[parts.Length - 1];
                     report?.Invoke(prog);
                 }
-            }, null, ct).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
             LastRun = "robocopy " + r.ExitCode + ": " + sample;
             if (r.ExitCode >= 8) Logger.Warn("Robocopy " + src + " → mã " + r.ExitCode + ": " + sample);
             return r.ExitCode;
         }
+
+        /// <summary>Chạy robocopy qua cmd với bảng mã UTF-8 để tên tệp tiếng Việt hiển thị đúng.</summary>
+        private static Task<RunResult> RunRobocopy(string args, Action<string, bool> onLine, CancellationToken ct) =>
+            ProcessRunner.RunAsync(Path.Combine(Environment.SystemDirectory, "cmd.exe"), "/d /c chcp 65001 >nul & \"" + Robocopy + "\" " + args, onLine, null, ct);
 
         /// <summary>Mã thoát và vài dòng đầu của lần chạy robocopy gần nhất (để chẩn đoán).</summary>
         public static string LastRun { get; private set; }
@@ -322,10 +326,10 @@ namespace BacSiMayTinh.Modules
         {
             // /XO: không chép đè nếu tệp trên máy mới hơn.
             var args = $"\"{src.TrimEnd('\\')}\" \"{dst.TrimEnd('\\')}\" Bookmarks /S /XJ /XO /R:1 /W:1 /NP /NDL /NJH /NJS /FP /BYTES";
-            var r = await ProcessRunner.RunAsync(Robocopy, args, (line, p) =>
+            var r = await RunRobocopy(args, (line, p) =>
             {
                 if (line.IndexOf(":\\", StringComparison.Ordinal) > 0) { Interlocked.Increment(ref prog.Files); report?.Invoke(prog); }
-            }, null, ct).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
             return r.ExitCode;
         }
     }
