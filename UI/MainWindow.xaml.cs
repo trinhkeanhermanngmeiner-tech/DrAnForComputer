@@ -28,6 +28,9 @@ namespace BacSiMayTinh.UI
             ["cleaner"] = () => new CleanerPage(),
             ["optimizer"] = () => new OptimizerPage(),
             ["repair"] = () => new RepairPage(),
+            ["backup"] = () => new BackupPage(),
+            ["drivers"] = () => new DriversPage(),
+            ["security"] = () => new SecurityPage(),
             ["sysinfo"] = () => new SystemInfoPage(),
             ["uninstall"] = () => new UninstallerPage(),
             ["disk"] = () => new DiskPage(),
@@ -290,7 +293,9 @@ namespace BacSiMayTinh.UI
                 (L.IsEnglish ? LangVi : LangEn).IsChecked = true;
             }
             else if (sub != null && _pages.TryGetValue(page, out var p) && p is ISnapSub ss) ss.SnapSub(sub);
-            await Task.Delay(page == "uninstall" && sub != null ? 25000 : page == "sysinfo" || page == "dashboard" || sub != null ? 6000 : 3500);
+            await Task.Delay(page == "uninstall" && sub != null ? 25000
+                : page == "security" || page == "drivers" ? 12000
+                : page == "sysinfo" || page == "dashboard" || page == "backup" || sub != null ? 6000 : 3500);
             RenderToPng(this, file);
             if (langBefore != null) L.Set(langBefore); // trả lại cài đặt ngôn ngữ ban đầu
             ExitApp();

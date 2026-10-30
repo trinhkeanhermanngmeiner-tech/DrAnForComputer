@@ -7,7 +7,7 @@ namespace BacSiMayTinh.Core
     {
         public const string Name = "DrAn For Computer";
         public const string Author = "BS. Trịnh Kế An";
-        public const string Version = "1.1.1";
+        public const string Version = "1.2.0";
         public static string Edition => L.T("Bản miễn phí");
         public static string Slogan => L.T("Bác sĩ chăm sóc máy tính của bạn");
         public const string Id = "DrAnForComputer";

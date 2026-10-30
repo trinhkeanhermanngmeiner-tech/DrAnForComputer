@@ -51,18 +51,17 @@ jobs:
         run: |
           $exe = (Resolve-Path bin\Release\net48\DrAnForComputer.exe).Path
           $shots = @(
-            @('dashboard','vi',''), @('optimizer','vi',''), @('tools','vi',''), @('settings','vi',''),
-            @('backup','vi',''), @('backup','vi','restore'), @('backup','vi','data'), @('backup','vi','auto'),
-            @('drivers','vi',''), @('drivers','vi','update'), @('drivers','vi','store'),
-            @('security','vi',''), @('security','vi','wu'),
+            @('dashboard','vi',''), @('tools','vi',''),
+            @('backup','vi',''), @('backup','vi','data'), @('backup','vi','auto'),
+            @('drivers','vi',''), @('drivers','vi','update'), @('drivers','vi','store'), @('drivers','vi','history'),
+            @('security','vi',''), @('security','vi','scan'), @('security','vi','wu'),
             @('backup','en',''), @('drivers','en',''), @('security','en','')
           )
           foreach ($s in $shots) {
             $name = "out\snap_$($s[0])_$($s[1])$(if ($s[2]) { '_' + $s[2] }).png"
-            $a = @('--lang', $s[1], '--snap', $s[0], "$PWD\$name")
+            $a = @('--snap', $s[0], "$PWD\$name")
             if ($s[2]) { $a += $s[2] }
-            # --lang phải đứng sau --snap <trang> <ảnh> [tab] nên đặt lại thứ tự
-            $a = @('--snap', $s[0], "$PWD\$name"); if ($s[2]) { $a += $s[2] }; $a += @('--lang', $s[1])
+            $a += @('--lang', $s[1])
             $p = Start-Process $exe -ArgumentList $a -PassThru
             if (-not $p.WaitForExit(120000)) { $p.Kill() }
             "$name : $(Test-Path $name)"

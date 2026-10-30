@@ -36,6 +36,15 @@ namespace BacSiMayTinh
                 return;
             }
 
+            // Sao lưu tự động theo lịch – không hiện giao diện.
+            if (args.Contains("--autobackup"))
+            {
+                Logger.Info("Sao lưu tự động theo lịch bắt đầu");
+                ConfigBackup.RunScheduled();
+                Shutdown();
+                return;
+            }
+
             if (args.Length >= 2 && args[0] == "--selftest")
             {
                 int fails = SelfTest.Run(args[1]);
@@ -98,7 +107,7 @@ namespace BacSiMayTinh
             if (snap)
             {
                 w.Show();
-                w.Snap(args[1], args[2], args.Length >= 4 ? args[3] : null);
+                w.Snap(args[1], args[2], args.Length >= 4 && !args[3].StartsWith("--") ? args[3] : null);
             }
             else if (!tray) w.Show();
         }

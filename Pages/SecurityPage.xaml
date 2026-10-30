@@ -1,0 +1,244 @@
+<UserControl x:Class="BacSiMayTinh.Pages.SecurityPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:BacSiMayTinh.Controls">
+    <Grid Margin="32,0,32,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="{c:T 'Bảo mật &amp; Cập nhật'}" Style="{StaticResource T.H1}"/>
+            <TextBlock Text="{c:T 'Kiểm tra lỗ hổng thường gặp, quét virus bằng Microsoft Defender và kiểm soát Windows Update.'}"
+                       Style="{StaticResource T.Sub}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource TabBar}" Margin="0,16,0,14">
+            <StackPanel x:Name="Tabs" Orientation="Horizontal">
+                <RadioButton Style="{StaticResource TabItem}" GroupName="SecTab" Content="{c:T 'Kiểm tra bảo mật'}" Tag="check" Checked="Tab_Checked" IsChecked="True"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="SecTab" Content="{c:T 'Quét virus'}" Tag="scan" Checked="Tab_Checked"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="SecTab" Content="Windows Update" Tag="wu" Checked="Tab_Checked"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <!-- ================= Kiểm tra bảo mật ================= -->
+            <DockPanel x:Name="CheckPanel">
+                <Border DockPanel.Dock="Top" Style="{StaticResource Card}" Margin="0,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Width="92" Height="92">
+                            <c:RingGauge x:Name="Gauge" Thickness="9" TrackBrush="{DynamicResource B.Track}" Value="0"/>
+                            <TextBlock x:Name="ScoreText" Text="--" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <StackPanel Grid.Column="1" Margin="18,0,16,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="CheckTitle" Text="{c:T 'Đang kiểm tra…'}" Style="{StaticResource T.H2}"/>
+                            <TextBlock x:Name="CheckSub" Style="{StaticResource T.Sub}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button x:Name="RecheckBtn" Click="Recheck_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE72C;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                                    <TextBlock Text="{c:T 'Kiểm tra lại'}" Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="FixAllBtn" Style="{StaticResource Btn.Primary}" Margin="8,0,0,0" MinWidth="130" Click="FixAll_Click" IsEnabled="False">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE90F;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                                    <TextBlock Text="{c:T 'Sửa tất cả'}" Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource Card}" Padding="6">
+                    <ListBox x:Name="CheckList" Style="{StaticResource PlainList}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Row}" Padding="12,9">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="36" Height="36" CornerRadius="10" Background="{Binding Bg}" VerticalAlignment="Top">
+                                            <TextBlock Text="{Binding Glyph}" Style="{StaticResource T.Icon}" FontSize="16" Foreground="{Binding Fg}" HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="12,0,12,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold"/>
+                                                <Border Style="{StaticResource Badge}" Background="{Binding Bg}" Margin="8,0,0,0">
+                                                    <TextBlock Text="{Binding LevelText}" FontSize="10.5" FontWeight="SemiBold" Foreground="{Binding Fg}"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Detail}" Style="{StaticResource T.Sub}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                                            <TextBlock Text="{Binding Advice}" Style="{StaticResource T.Muted}" TextWrapping="Wrap" Margin="0,2,0,0"
+                                                       Visibility="{Binding Advice, Converter={StaticResource BoolVis}}"/>
+                                        </StackPanel>
+                                        <Button Grid.Column="2" Content="{Binding FixText}" VerticalAlignment="Center" MinWidth="100" Click="Fix_Click"
+                                                IsEnabled="{Binding IsIdle}" Visibility="{Binding CanFix, Converter={StaticResource BoolVis}}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </DockPanel>
+
+            <!-- ================= Quét virus ================= -->
+            <DockPanel x:Name="ScanPanel" Visibility="Collapsed">
+                <Border DockPanel.Dock="Top" Style="{StaticResource Card}" Margin="0,0,0,12">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="52" Height="52" CornerRadius="14" Background="{DynamicResource B.AccentGrad}">
+                                <TextBlock Text="&#xE83D;" Style="{StaticResource T.Icon}" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center">
+                                <TextBlock x:Name="ScanTitle" Text="{c:T 'Quét virus bằng Microsoft Defender'}" Style="{StaticResource T.H2}"/>
+                                <TextBlock x:Name="ScanSub" Style="{StaticResource T.Sub}" Margin="0,3,0,0" TextWrapping="Wrap"
+                                           Text="{c:T 'Dùng bộ máy diệt virus có sẵn của Windows. Quét nhanh khoảng 2–10 phút, quét toàn bộ có thể mất hơn 1 giờ.'}"/>
+                            </StackPanel>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                            <Button x:Name="QuickBtn" Style="{StaticResource Btn.Primary}" MinWidth="130" Height="38" Click="Quick_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE945;" Style="{StaticResource T.Icon}" FontSize="13"/>
+                                    <TextBlock Text="{c:T 'Quét nhanh'}" Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="FullBtn" MinWidth="130" Height="38" Margin="8,0,0,0" Click="Full_Click" Content="{c:T 'Quét toàn bộ'}"/>
+                            <Button x:Name="FolderBtn" MinWidth="130" Height="38" Margin="8,0,0,0" Click="Folder_Click" Content="{c:T 'Quét USB / thư mục…'}"/>
+                            <Button x:Name="CancelScanBtn" MinWidth="90" Height="38" Margin="8,0,0,0" Click="CancelScan_Click" Content="{c:T 'Dừng'}" Visibility="Collapsed"/>
+                        </StackPanel>
+                        <ProgressBar x:Name="ScanProgress" IsIndeterminate="True" Margin="0,12,0,0" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Border>
+                <Grid DockPanel.Dock="Top" Margin="2,0,0,8">
+                    <TextBlock x:Name="ThreatSummary" Style="{StaticResource T.H3}" Text="{c:T 'Mối đe dọa đã phát hiện'}" VerticalAlignment="Center"/>
+                    <Button x:Name="RemoveBtn" HorizontalAlignment="Right" Style="{StaticResource Btn.Danger}" Content="{c:T 'Xử lý mối đe dọa'}" Click="Remove_Click" Visibility="Collapsed"/>
+                </Grid>
+                <Border Style="{StaticResource Card}" Padding="6">
+                    <Grid>
+                        <TextBlock x:Name="ThreatEmpty" Style="{StaticResource T.Sub}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                                   Text="{c:T 'Chưa có mối đe dọa nào được ghi nhận.'}"/>
+                        <ListBox x:Name="ThreatList" Style="{StaticResource PlainList}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Row}" Padding="12,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="&#xE7BA;" Style="{StaticResource T.Icon}" Foreground="{Binding Fg}" FontSize="16"/>
+                                            <StackPanel Grid.Column="1" Margin="12,0,12,0">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Style="{StaticResource T.Muted}"><Run Text="{c:T 'Mức độ: '}"/><Run Text="{Binding SeverityText}"/></TextBlock>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="2" Text="{Binding StateText}" Foreground="{Binding Fg}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </DockPanel>
+
+            <!-- ================= Windows Update ================= -->
+            <ScrollViewer x:Name="WuPanel" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel>
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="{c:T 'Tạm dừng cập nhật'}" Style="{StaticResource T.H3}"/>
+                                <TextBlock x:Name="PauseStatus" Style="{StaticResource T.Sub}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                <TextBlock Style="{StaticResource T.Muted}" Margin="0,6,0,0" TextWrapping="Wrap"
+                                           Text="{c:T 'Hữu ích khi đang làm việc quan trọng, mạng yếu hoặc chờ Microsoft sửa bản cập nhật lỗi. Hết hạn, Windows tự cập nhật lại – không nên dừng quá lâu vì máy sẽ thiếu bản vá bảo mật.'}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="16,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="PauseBox" Width="140"/>
+                                    <Button x:Name="PauseBtn" Style="{StaticResource Btn.Primary}" Content="{c:T 'Tạm dừng'}" Margin="8,0,0,0" MinWidth="100" Click="Pause_Click"/>
+                                </StackPanel>
+                                <Button x:Name="ResumeBtn" Content="{c:T 'Tiếp tục cập nhật ngay'}" Margin="0,8,0,0" Click="Resume_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="{c:T 'Giờ hoạt động'}" Style="{StaticResource T.H3}"/>
+                                <TextBlock x:Name="HoursStatus" Style="{StaticResource T.Sub}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                                <TextBlock Text="{c:T 'Từ'}" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="StartHour" Width="80" Margin="8,0,0,0"/>
+                                <TextBlock Text="{c:T 'đến'}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <ComboBox x:Name="EndHour" Width="80" Margin="8,0,0,0"/>
+                                <Button Content="{c:T 'Áp dụng'}" Margin="8,0,0,0" Click="Hours_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid>
+                                <StackPanel Margin="0,0,330,0">
+                                    <TextBlock Text="{c:T 'Bản cập nhật đang chờ cài'}" Style="{StaticResource T.H3}"/>
+                                    <TextBlock x:Name="PendingStatus" Style="{StaticResource T.Sub}" Margin="0,4,0,0" TextWrapping="Wrap"
+                                               Text="{c:T 'Nếu một bản cập nhật gây lỗi (máy in, âm thanh, màn hình xanh…), hãy ẩn nó để Windows không tự cài lại.'}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <Button x:Name="PendingBtn" Content="{c:T 'Kiểm tra'}" Click="Pending_Click"/>
+                                    <Button Content="{c:T 'Bỏ ẩn tất cả'}" Margin="8,0,0,0" Click="UnhideAll_Click"/>
+                                    <Button Content="{c:T 'Mở Windows Update'}" Margin="8,0,0,0" Click="OpenWu_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <ItemsControl x:Name="PendingList" Margin="0,10,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource Row}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Margin="0,0,12,0">
+                                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding Detail}" Style="{StaticResource T.Muted}"/>
+                                                </StackPanel>
+                                                <Button Grid.Column="1" Content="{c:T 'Ẩn'}" VerticalAlignment="Center" Click="HidePending_Click"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

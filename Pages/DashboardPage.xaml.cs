@@ -126,6 +126,8 @@ namespace BacSiMayTinh.Pages
             public bool DiskBad;
             public double UptimeDays;
             public uint RamLoad;
+            public int ProblemDevices, MissingDrivers;
+            public double? BackupDays;
         }
 
         public async Task Analyze()
@@ -169,6 +171,14 @@ namespace BacSiMayTinh.Pages
                     catch { }
                     res.UptimeDays = SystemQuick.UptimeDays;
                     res.RamLoad = Native.GetMemory().dwMemoryLoad;
+                    try
+                    {
+                        var pd = DriverManager.Problems();
+                        res.ProblemDevices = pd.Count;
+                        res.MissingDrivers = pd.Count(x => x.MissingDriver);
+                    }
+                    catch { }
+                    res.BackupDays = ConfigBackup.DaysSinceLastBackup();
                     return res;
                 });
                 _last = r;
@@ -193,6 +203,7 @@ namespace BacSiMayTinh.Pages
             if (r.RamLoad > 85) score -= 10; else if (r.RamLoad > 70) score -= 5;
             if (r.TweaksPending >= 8) score -= 10; else if (r.TweaksPending >= 3) score -= 5;
             if (r.DiskBad) score -= 25;
+            if (r.ProblemDevices > 0) score -= 5;
             if (r.UptimeDays > 7) score -= 5;
             score = Math.Max(5, score);
 
@@ -229,6 +240,16 @@ namespace BacSiMayTinh.Pages
                     Title = L.F("{0} ứng dụng tự chạy khi bật máy", r.StartupOn),
                     Detail = L.T("Tắt bớt các ứng dụng không cần thiết để máy khởi động nhanh hơn."), ActionText = L.T("Quản lý"),
                     Action = () => main.GetPage<OptimizerPage>("optimizer")?.ShowTab("startup") });
+            if (r.ProblemDevices > 0)
+                list.Add(new Suggestion { Glyph = "\uE772", Fg = Pal.Amber, Bg = Pal.AmberBg,
+                    Title = r.MissingDrivers > 0 ? L.F("{0} thiết bị chưa có driver", r.MissingDrivers) : L.F("{0} thiết bị đang báo lỗi driver", r.ProblemDevices),
+                    Detail = L.T("Thiết bị thiếu driver có thể không hoạt động (Wi-Fi, âm thanh, card màn hình…). Tìm driver qua Windows Update."), ActionText = L.T("Xem driver"),
+                    Action = () => main.Navigate("drivers") });
+            if (!r.BackupDays.HasValue || r.BackupDays > 30)
+                list.Add(new Suggestion { Glyph = "\uE777", Fg = Pal.Blue, Bg = Pal.BlueBg,
+                    Title = r.BackupDays.HasValue ? L.F("Đã {0:0} ngày chưa sao lưu cấu hình", r.BackupDays) : L.T("Chưa có bản sao lưu cấu hình Windows"),
+                    Detail = L.T("Sao lưu tinh chỉnh, driver, Wi-Fi… để phục hồi nhanh khi máy lỗi hoặc sau khi cài lại Windows."), ActionText = L.T("Sao lưu"),
+                    Action = () => main.Navigate("backup") });
             if (r.TweaksPending > 0)
                 list.Add(new Suggestion { Glyph = "", Title = L.F("{0} tinh chỉnh khuyến nghị chưa được áp dụng", r.TweaksPending),
                     Detail = L.T("Tắt quảng cáo, theo dõi, hiệu ứng thừa… Mọi thay đổi đều có thể hoàn tác."), ActionText = L.T("Tối ưu"),
