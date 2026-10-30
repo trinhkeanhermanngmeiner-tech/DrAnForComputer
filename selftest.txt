@@ -1,0 +1,58 @@
+﻿[ĐẠT] Tinh chỉnh chưa áp dụng ban đầu
+[ĐẠT] Áp dụng tinh chỉnh
+[ĐẠT] Có bản sao lưu
+[ĐẠT] Hoàn tác DWORD
+[ĐẠT] Hoàn tác chuỗi
+[ĐẠT] Hoàn tác nhị phân
+[ĐẠT] Xóa giá trị vốn không tồn tại
+[ĐẠT] Xóa cờ đã áp dụng
+[ĐẠT] Hoàn tác về giá trị mặc định khi bản gốc đã giống
+[ĐẠT] Tạo khóa với giá trị mặc định rỗng
+[ĐẠT] Hoàn tác xóa cả khóa
+[ĐẠT] Lưu/đọc JSON
+[ĐẠT] Cài đặt mặc định
+[ĐẠT] Quét chỉ tính tệp cũ – 5000 byte / 2 tệp
+[ĐẠT] Dọn đúng tệp cũ (kể cả tệp chỉ đọc) – giải phóng 5000
+[ĐẠT] Xóa thư mục con rỗng
+[ĐẠT] Tách exe có ngoặc kép
+[ĐẠT] Tách exe không ngoặc kép
+[ĐẠT] MSI /I → /X – /X{12345678-1234-1234-1234-123456789012}
+[ĐẠT] Lệnh gỡ có khoảng trắng
+[ĐẠT] Định dạng dung lượng – 1,5 KB
+[ĐẠT] CMD xuất đường dẫn tiếng Việt – D:\a\DrAnForComputer\DrAnForComputer\bin\Release\net48\DrAnForComputer.exe
+[ĐẠT] PowerShell xuất tiếng Việt – Xin chào Việt Nam
+[ĐẠT] Đọc danh sách khởi động
+[ĐẠT] Đọc danh sách tinh chỉnh – 37 mục
+[ĐẠT] Đọc dịch vụ
+[ĐẠT] Đọc phần mềm đã cài
+[ĐẠT] Loại ổ hệ thống – NVMe SSD
+[ĐẠT] Đọc hồ sơ Wi-Fi – 0 mạng
+[ĐẠT] Đọc bảng winget – Microsoft Visual C++ v14 Redis…,Microsoft.VCRedist.2015+.x6,4 14.50.1,14.51.2  w,inget | Foxit PDF Reader,Foxit.FoxitReader.Inno,11.2.2,2025.2.0,winget
+[ĐẠT] Kiểm tra ổ đĩa ghi/đọc 64 MB không lỗi – ghi 146 MB/s, đọc 209 MB/s, lỗi: 
+[ĐẠT] Dọn tệp thử của kiểm tra ổ đĩa
+[ĐẠT] Đọc bản phát hành mới nhất trên GitHub – v1.1.1, exe 713728 byte, mới hơn bản đang chạy: False
+[ĐẠT] Tải và kiểm tra tệp cập nhật – C:\Users\runneradmin\AppData\Local\Temp\DrAnForComputer_1.1.1.exe
+[ĐẠT] So sánh phiên bản
+[ĐẠT] Tạo bản sao lưu cấu hình – 89 giá trị registry, 38 dịch vụ, 7 mục khởi động, 3 menu, 1 card mạng, nguồn 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c, 197 ms
+[ĐẠT] Đọc lại bản sao lưu – tweaks,services,startup,context,power,hosts,network
+[ĐẠT] Phục hồi giá trị registry đã bị đổi – ✓ Tinh chỉnh Windows: phục hồi 2 giá trị
+[ĐẠT] Phục hồi xóa giá trị vốn không có
+[ĐẠT] Giữ nguyên dữ liệu hoàn tác khi bản sao lưu không kèm
+[ĐẠT] Chỉ giữ 2 bản tự động mới nhất, không đụng bản thủ công – auto_0,auto_1
+[ĐẠT] Sao lưu dữ liệu (robocopy) – đếm tệp & dung lượng – 2 tệp, 8000 byte, lỗi 0 | robocopy 1: |    New File  ||    3000|C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_src\B?ng luong tháng 10.xlsx // |    New File  ||    5000|C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_src\Thu m?c con\?nh d?p.jpg // 
+[ĐẠT] Sao lưu lần 2 chỉ chép tệp thay đổi – 0 tệp
+[ĐẠT] Phục hồi dữ liệu về thư mục gốc – 2 tệp | robocopy 1: |    New File  ||    3000|C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_dst\DrAn_DuLieu_runnervmdaln5_runneradmin\khac_thu\B?ng luong tháng 10.xlsx // |    New File  ||    5000|C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_dst\DrAn_DuLieu_runnervmdaln5_runneradmin\khac_thu\Thu m?c con\?nh d?p.jpg // 
+[ĐẠT] Đọc danh sách driver – 63 driver, 3 của hãng thứ ba
+[ĐẠT] Đọc thiết bị lỗi – 1 thiết bị: VMBUS\{C376C1C3-D276-48D2-90A9-C04748072C60}\{C4E5E7D1-D748-4AFC-979D-683167910A55} 28
+[ĐẠT] Quét driver cũ trùng lặp – 0 gói, 0 B
+[ĐẠT] So sánh phiên bản driver
+[ĐẠT] Gợi ý công cụ của hãng
+[ĐẠT] Đọc lịch sử Windows Update – 30/10/2026
+[ĐẠT] Tìm driver qua Windows Update – 0 bản: 
+[ĐẠT] Kiểm tra bảo mật – av:Bad | fw:Good | uac:Warn | smb1:Good | autorun:Warn | ext:Warn | rdp:Info | wu:Good | sb:Info → 64 điểm
+[ĐẠT] Tạm dừng Windows Update 2 tuần – 2026-11-13T10:10:44
+[ĐẠT] Tiếp tục Windows Update
+[ĐẠT] Đặt giờ hoạt động
+[ĐẠT] Chặn giờ hoạt động quá 18 tiếng
+[ĐẠT] Bản dịch tiếng Anh khớp định dạng – 1532 mục
+==> TẤT CẢ ĐẠT

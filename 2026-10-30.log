@@ -1,0 +1,40 @@
+﻿10:10:18 [INFO] Áp dụng tinh chỉnh: Kiểm tra
+10:10:18 [INFO] Hoàn tác tinh chỉnh: Kiểm tra
+10:10:18 [INFO] Áp dụng tinh chỉnh: Kiểm tra 2
+10:10:18 [INFO] Hoàn tác tinh chỉnh: Kiểm tra 2
+10:10:18 [INFO] Áp dụng tinh chỉnh: Kiểm tra 3
+10:10:18 [INFO] Hoàn tác tinh chỉnh: Kiểm tra 3
+10:10:18 [INFO] Dọn 't': giải phóng 4,9 KB
+10:10:25 [INFO] Kiểm tra ổ C:\: ghi 146 MB/s, đọc 209 MB/s, tốt 67108864, lỗi 0
+10:10:26 [INFO] Bắt đầu sao lưu cấu hình (manual): tweaks,services,startup,context,power,hosts,network → C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_backup\runnervmdaln5_2026-10-30_10-10-26_manual
+10:10:26 [INFO] Sao lưu cấu hình xong: C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_backup\runnervmdaln5_2026-10-30_10-10-26_manual (15,6 KB)
+10:10:26 [INFO] Phục hồi từ C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_backup\thu_phuc_hoi: tweaks
+10:10:26 [INFO] Phục hồi xong: ✓ Tinh chỉnh Windows: phục hồi 2 giá trị
+10:10:26 [INFO] Xóa bản sao lưu cũ C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_backup\auto_2
+10:10:26 [INFO] Xóa bản sao lưu cũ C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_backup\auto_3
+10:10:26 [INFO] Sao lưu dữ liệu cá nhân → C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_dst\DrAn_DuLieu_runnervmdaln5_runneradmin: custom:C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_src
+10:10:26 [INFO] Sao lưu dữ liệu xong: 2 tệp, 7,8 KB, lỗi 0
+10:10:26 [INFO] Sao lưu dữ liệu cá nhân → C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_dst\DrAn_DuLieu_runnervmdaln5_runneradmin: custom:C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_src
+10:10:26 [INFO] Sao lưu dữ liệu xong: 0 tệp, 0 B, lỗi 0
+10:10:26 [INFO] Phục hồi dữ liệu cá nhân từ C:\Users\runneradmin\AppData\Local\Temp\dran_selftest_data_dst\DrAn_DuLieu_runnervmdaln5_runneradmin
+10:10:26 [INFO] Phục hồi dữ liệu xong: 2 tệp, 7,8 KB, lỗi 0
+10:10:33 [INFO] Windows Update: tìm 'IsInstalled=0 and Type='Driver' and IsHidden=0'
+10:10:40 [INFO] Windows Update: 0 bản cập nhật
+10:10:44 [INFO] Tạm dừng Windows Update 14 ngày (đến 13/11/2026)
+10:10:44 [INFO] Tiếp tục Windows Update
+10:10:44 [INFO] Đặt giờ hoạt động 7h–23h
+10:10:45 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:10:54 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:10:59 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:11:06 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:11:13 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:11:21 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:11:34 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:11:47 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:12:01 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:12:14 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:12:27 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:12:40 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:12:54 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:13:01 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
+10:13:14 [INFO] Khởi động DrAn For Computer v1.2.0 (Admin: True, Build: 26100)
