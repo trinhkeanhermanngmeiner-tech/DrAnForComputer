@@ -223,7 +223,7 @@ namespace BacSiMayTinh.Modules
             var sb = new StringBuilder();
             sb.Append('"').Append(src.TrimEnd('\\')).Append("\" \"").Append(dst.TrimEnd('\\')).Append('"');
             if (!string.IsNullOrEmpty(pattern)) sb.Append(" \"").Append(pattern).Append('"');
-            sb.Append(" /E /XJ /R:1 /W:1 /MT:8 /NP /NDL /NJH /NJS /FP /BYTES /UNICODE /XA:O");
+            sb.Append(" /E /XJ /R:1 /W:1 /MT:8 /NP /NDL /NJH /NJS /FP /BYTES /XA:O");
             if (onlyMissing) sb.Append(" /XC /XN /XO");
             if (excludeDirs != null && excludeDirs.Length > 0)
             {
@@ -231,8 +231,10 @@ namespace BacSiMayTinh.Modules
                 foreach (var d in excludeDirs) sb.Append(" \"").Append(d).Append('"');
             }
             var errRx = new Regex(@"\(0x[0-9A-Fa-f]{8}\)");
+            var sample = new StringBuilder();
             var r = await ProcessRunner.RunAsync(Robocopy, sb.ToString(), (line, p) =>
             {
+                if (sample.Length < 600) lock (sample) sample.Append(line.Replace('\t', '|')).Append(" // ");
                 if (errRx.IsMatch(line)) { Interlocked.Increment(ref prog.Errors); return; }
                 var parts = line.Split('\t').Select(x => x.Trim()).Where(x => x.Length > 0).ToArray();
                 if (parts.Length >= 2 && (parts[parts.Length - 1].IndexOf(":\\", StringComparison.Ordinal) > 0 || parts[parts.Length - 1].StartsWith("\\\\")))
@@ -242,9 +244,14 @@ namespace BacSiMayTinh.Modules
                     prog.Current = parts[parts.Length - 1];
                     report?.Invoke(prog);
                 }
-            }, Encoding.Unicode, ct).ConfigureAwait(false);
+            }, null, ct).ConfigureAwait(false);
+            LastRun = "robocopy " + r.ExitCode + ": " + sample;
+            if (r.ExitCode >= 8) Logger.Warn("Robocopy " + src + " → mã " + r.ExitCode + ": " + sample);
             return r.ExitCode;
         }
+
+        /// <summary>Mã thoát và vài dòng đầu của lần chạy robocopy gần nhất (để chẩn đoán).</summary>
+        public static string LastRun { get; private set; }
 
         public static async Task<DataBackupResult> RunAsync(List<DataSource> sources, string destRoot, Action<DataProgress> report, CancellationToken ct)
         {
@@ -314,11 +321,11 @@ namespace BacSiMayTinh.Modules
         private static async Task<int> CopyBookmarksAsync(string src, string dst, DataProgress prog, Action<DataProgress> report, CancellationToken ct)
         {
             // /XO: không chép đè nếu tệp trên máy mới hơn.
-            var args = $"\"{src.TrimEnd('\\')}\" \"{dst.TrimEnd('\\')}\" Bookmarks /S /XJ /XO /R:1 /W:1 /NP /NDL /NJH /NJS /FP /BYTES /UNICODE";
+            var args = $"\"{src.TrimEnd('\\')}\" \"{dst.TrimEnd('\\')}\" Bookmarks /S /XJ /XO /R:1 /W:1 /NP /NDL /NJH /NJS /FP /BYTES";
             var r = await ProcessRunner.RunAsync(Robocopy, args, (line, p) =>
             {
                 if (line.IndexOf(":\\", StringComparison.Ordinal) > 0) { Interlocked.Increment(ref prog.Files); report?.Invoke(prog); }
-            }, Encoding.Unicode, ct).ConfigureAwait(false);
+            }, null, ct).ConfigureAwait(false);
             return r.ExitCode;
         }
     }

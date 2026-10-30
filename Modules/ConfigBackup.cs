@@ -403,9 +403,9 @@ namespace BacSiMayTinh.Modules
             var list = new List<BackupSet>();
             foreach (var r in roots)
             {
-                if (string.IsNullOrWhiteSpace(r) || !seen.Add(Path.GetFullPath(r).TrimEnd('\\'))) continue;
                 try
                 {
+                    if (string.IsNullOrWhiteSpace(r) || !seen.Add(Path.GetFullPath(r).TrimEnd('\\'))) continue;
                     if (!Directory.Exists(r)) continue;
                     foreach (var d in Directory.GetDirectories(r))
                     {

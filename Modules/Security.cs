@@ -301,7 +301,7 @@ try { 'sb=' + (Confirm-SecureBootUEFI -ErrorAction Stop) } catch { 'sb=' }
             {
                 rdp.Level = SecLevel.Info;
                 rdp.Detail = L.T("Đang bật – chỉ nên bật khi bạn thực sự điều khiển máy này từ xa");
-                rdp.FixText = L.T("Tắt");
+                rdp.FixText = L.T("Tắt Remote Desktop");
                 rdp.Fix = () =>
                 {
                     RegistryHelper.SetValue(Ts, "fDenyTSConnections", 1, RegistryValueKind.DWord);

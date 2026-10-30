@@ -8,7 +8,7 @@
         private static Dictionary<string, string> Build()
         {
             var d = new Dictionary<string, string>(1200);
-            Part1(d); Part2(d); Part3(d); Part4(d); Part5(d);
+            Part1(d); Part2(d); Part3(d); Part4(d); Part5(d); Part6(d);
             return d;
         }
 

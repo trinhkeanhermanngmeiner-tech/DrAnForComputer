@@ -53,11 +53,11 @@
                                 <TextBox x:Name="NoteBox" Grid.Column="1" Margin="10,0,0,0" MaxLength="80"
                                          ToolTip="{c:T 'Ví dụ: Trước khi cài lại Win, Máy vừa tối ưu xong…'}"/>
                             </Grid>
-                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                <TextBlock Text="&#xE8B7;" Style="{StaticResource T.Icon}" FontSize="12" Foreground="{DynamicResource B.Text2}" VerticalAlignment="Center"/>
-                                <TextBlock x:Name="RootText" Style="{StaticResource T.Muted}" Margin="8,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="520"/>
-                                <Button Style="{StaticResource Btn.Link}" Content="{c:T 'Đổi nơi lưu'}" Margin="10,0,0,0" Click="ChangeRoot_Click"/>
-                            </StackPanel>
+                            <DockPanel Margin="0,10,0,0" LastChildFill="True">
+                                <TextBlock DockPanel.Dock="Left" Text="&#xE8B7;" Style="{StaticResource T.Icon}" FontSize="12" Foreground="{DynamicResource B.Text2}" VerticalAlignment="Center"/>
+                                <Button DockPanel.Dock="Right" Style="{StaticResource Btn.Link}" Content="{c:T 'Đổi nơi lưu'}" Margin="10,0,0,0" Click="ChangeRoot_Click"/>
+                                <TextBlock x:Name="RootText" Style="{StaticResource T.Muted}" Margin="8,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            </DockPanel>
                             <TextBlock x:Name="RootWarn" Foreground="#E8A317" FontSize="11.5" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
                                        Text="{c:T 'Nơi lưu đang ở ổ C – sẽ mất nếu cài lại Windows. Hãy chọn ổ D hoặc USB, hoặc chép thư mục sao lưu ra ngoài trước khi cài lại.'}"/>
                         </StackPanel>

@@ -44,7 +44,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Margin="0,2,0,0" TextTrimming="CharacterEllipsis">
-                                        <Run Text="•"/> <Run Text="{Binding Name}" FontWeight="SemiBold"/> <Run Text=" – "/><Run Text="{Binding CodeText}" Foreground="{DynamicResource B.Text2}"/>
+                                        <Run Text="•"/> <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold"/> <Run Text=" – "/><Run Text="{Binding CodeText, Mode=OneWay}" Foreground="{DynamicResource B.Text2}"/>
                                     </TextBlock>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -159,7 +159,7 @@
                                     <Button Margin="0,4,8,0" Click="Vendor_Click" ToolTip="{Binding Url}">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE8A7;" Style="{StaticResource T.Icon}" FontSize="12"/>
-                                            <TextBlock Margin="8,0,0,0"><Run Text="{Binding Name}" FontWeight="SemiBold"/><Run Text="  –  "/><Run Text="{Binding Detail}" Foreground="{DynamicResource B.Text2}"/></TextBlock>
+                                            <TextBlock Margin="8,0,0,0"><Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold"/><Run Text="  –  "/><Run Text="{Binding Detail, Mode=OneWay}" Foreground="{DynamicResource B.Text2}"/></TextBlock>
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>

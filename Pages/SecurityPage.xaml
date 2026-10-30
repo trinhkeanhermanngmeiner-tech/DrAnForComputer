@@ -145,7 +145,7 @@
                                             <TextBlock Text="&#xE7BA;" Style="{StaticResource T.Icon}" Foreground="{Binding Fg}" FontSize="16"/>
                                             <StackPanel Grid.Column="1" Margin="12,0,12,0">
                                                 <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
-                                                <TextBlock Style="{StaticResource T.Muted}"><Run Text="{c:T 'Mức độ: '}"/><Run Text="{Binding SeverityText}"/></TextBlock>
+                                                <TextBlock Style="{StaticResource T.Muted}"><Run Text="{c:T 'Mức độ: '}"/><Run Text="{Binding SeverityText, Mode=OneWay}"/></TextBlock>
                                             </StackPanel>
                                             <TextBlock Grid.Column="2" Text="{Binding StateText}" Foreground="{Binding Fg}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </Grid>

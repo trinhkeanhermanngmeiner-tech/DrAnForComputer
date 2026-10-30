@@ -271,13 +271,13 @@ namespace BacSiMayTinh.Core
                 var r1 = DataBackup.RunAsync(new List<DataSource> { src }, dataDst, null, CancellationToken.None).Result;
                 var tgt = DataBackup.TargetFolder(dataDst);
                 Check("Sao lưu dữ liệu (robocopy) – đếm tệp & dung lượng", r1.Files == 2 && r1.Bytes == 8000 && r1.Errors == 0 &&
-                    File.Exists(Path.Combine(tgt, "khac_thu", "Thư mục con", "ảnh đẹp.jpg")), $"{r1.Files} tệp, {r1.Bytes} byte, lỗi {r1.Errors}");
+                    File.Exists(Path.Combine(tgt, "khac_thu", "Thư mục con", "ảnh đẹp.jpg")), $"{r1.Files} tệp, {r1.Bytes} byte, lỗi {r1.Errors} | {DataBackup.LastRun}");
                 var r2 = DataBackup.RunAsync(new List<DataSource> { src }, dataDst, null, CancellationToken.None).Result;
                 Check("Sao lưu lần 2 chỉ chép tệp thay đổi", r2.Files == 0, r2.Files + " tệp");
                 var man = DataBackup.LoadBackup(tgt);
                 man.Entries[0].OriginalPath = dataBack;
                 var r3 = DataBackup.RestoreAsync(tgt, man, true, null, CancellationToken.None).Result;
-                Check("Phục hồi dữ liệu về thư mục gốc", r3.Files == 2 && File.Exists(Path.Combine(dataBack, "Bảng lương tháng 10.xlsx")), r3.Files + " tệp");
+                Check("Phục hồi dữ liệu về thư mục gốc", r3.Files == 2 && File.Exists(Path.Combine(dataBack, "Bảng lương tháng 10.xlsx")), r3.Files + " tệp | " + DataBackup.LastRun);
             }
             catch (Exception ex) { Check("Sao lưu dữ liệu cá nhân", false, ex.GetBaseException().ToString()); }
             finally
