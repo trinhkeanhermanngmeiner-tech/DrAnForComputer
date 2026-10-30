@@ -100,5 +100,5 @@ Bản sao lưu dữ liệu cá nhân: `<nơi lưu>\DrAn_DuLieu_<máy>_<người 
 ## Kiểm tra tự động (GitHub Actions)
 
 `.github/workflows/build.yml` build trên Windows mỗi lần đẩy mã, chạy `--selftest` và chụp giao diện.
-Đẩy tag `vX.Y.Z` (khớp `AppInfo.Version`) → tự tạo Release kèm `DrAnForComputer.exe` và `.zip`; ghi chú phát hành lấy từ `docs/release-notes/vX.Y.Z.md`.
+Tăng `AppInfo.Version` (và `<Version>` trong .csproj) rồi đẩy lên `main` – hoặc đẩy tag `vX.Y.Z` khớp phiên bản – → tự tạo Release kèm `DrAnForComputer.exe` và `.zip`; ghi chú phát hành lấy từ `docs/release-notes/vX.Y.Z.md`.
 Dữ liệu của bản 1.0 (`%LocalAppData%\BacSiMayTinh\`) được tự chép sang ở lần chạy đầu.
