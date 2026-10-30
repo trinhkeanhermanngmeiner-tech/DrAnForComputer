@@ -1,0 +1,266 @@
+<UserControl x:Class="BacSiMayTinh.Pages.BackupPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:BacSiMayTinh.Controls">
+    <Grid Margin="32,0,32,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="{c:T 'Sao lưu &amp; Phục hồi'}" Style="{StaticResource T.H1}"/>
+            <TextBlock Text="{c:T 'Chụp lại toàn bộ tinh chỉnh Windows, dịch vụ, driver và dữ liệu cá nhân để quay về bất cứ lúc nào – kể cả sau khi cài lại Windows.'}"
+                       Style="{StaticResource T.Sub}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource TabBar}" Margin="0,16,0,14">
+            <StackPanel x:Name="Tabs" Orientation="Horizontal">
+                <RadioButton Style="{StaticResource TabItem}" GroupName="BkTab" Content="{c:T 'Cấu hình Windows'}" Tag="config" Checked="Tab_Checked" IsChecked="True"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="BkTab" Content="{c:T 'Dữ liệu cá nhân'}" Tag="data" Checked="Tab_Checked"/>
+                <RadioButton Style="{StaticResource TabItem}" GroupName="BkTab" Content="{c:T 'Tự động'}" Tag="auto" Checked="Tab_Checked"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <!-- ================= Cấu hình Windows ================= -->
+            <DockPanel x:Name="ConfigPanel">
+                <Border DockPanel.Dock="Top" Style="{StaticResource Card}" Margin="0,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="{c:T 'Tạo bản sao lưu mới'}" Style="{StaticResource T.H3}"/>
+                            <ItemsControl x:Name="CompList" Margin="0,10,0,0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" ToolTip="{Binding Hint}" Margin="0,0,18,8"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{c:T 'Ghi chú:'}" Style="{StaticResource T.Sub}" VerticalAlignment="Center"/>
+                                <TextBox x:Name="NoteBox" Grid.Column="1" Margin="10,0,0,0" MaxLength="80"
+                                         ToolTip="{c:T 'Ví dụ: Trước khi cài lại Win, Máy vừa tối ưu xong…'}"/>
+                            </Grid>
+                            <DockPanel Margin="0,10,0,0" LastChildFill="True">
+                                <TextBlock DockPanel.Dock="Left" Text="&#xE8B7;" Style="{StaticResource T.Icon}" FontSize="12" Foreground="{DynamicResource B.Text2}" VerticalAlignment="Center"/>
+                                <Button DockPanel.Dock="Right" Style="{StaticResource Btn.Link}" Content="{c:T 'Đổi nơi lưu'}" Margin="10,0,0,0" Click="ChangeRoot_Click"/>
+                                <TextBlock x:Name="RootText" Style="{StaticResource T.Muted}" Margin="8,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            </DockPanel>
+                            <TextBlock x:Name="RootWarn" Foreground="#E8A317" FontSize="11.5" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
+                                       Text="{c:T 'Nơi lưu đang ở ổ C – sẽ mất nếu cài lại Windows. Hãy chọn ổ D hoặc USB, hoặc chép thư mục sao lưu ra ngoài trước khi cài lại.'}"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Style="{StaticResource Btn.Primary}" VerticalAlignment="Top" Height="44" MinWidth="170" Margin="16,0,0,0" FontSize="14" Click="Backup_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE74E;" Style="{StaticResource T.Icon}" FontSize="15"/>
+                                <TextBlock Text="{c:T 'Sao lưu ngay'}" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <Grid DockPanel.Dock="Top" Margin="2,0,0,8">
+                    <TextBlock x:Name="ListSummary" Style="{StaticResource T.H3}" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Click="OpenOther_Click" ToolTip="{c:T 'Chọn thư mục sao lưu chép từ máy khác hoặc từ USB (có tệp manifest.json)'}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE838;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                                <TextBlock Text="{c:T 'Mở bản sao lưu khác…'}" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Margin="8,0,0,0" Click="Refresh_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE72C;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                                <TextBlock Text="{c:T 'Làm mới'}" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Border Style="{StaticResource Card}" Padding="6">
+                    <Grid>
+                        <TextBlock x:Name="EmptyText" Style="{StaticResource T.Sub}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                                   Text="{c:T 'Chưa có bản sao lưu nào. Hãy bấm « Sao lưu ngay » để tạo bản đầu tiên.'}" Visibility="Collapsed"/>
+                        <ListBox x:Name="SetList" Style="{StaticResource PlainList}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Row}" Padding="12,9">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="36" Height="36" CornerRadius="10" Background="{DynamicResource B.AccentSoft}" VerticalAlignment="Top">
+                                                <TextBlock Text="{Binding Glyph}" Style="{StaticResource T.Icon}" FontSize="16" Foreground="{DynamicResource B.Accent}" HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="12,0,12,0">
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding ComponentsText}" Style="{StaticResource T.Sub}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                                                <TextBlock Text="{Binding Detail}" Style="{StaticResource T.Muted}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Button Content="{c:T 'Phục hồi'}" Style="{StaticResource Btn.Primary}" Padding="14,6" Click="Restore_Click"/>
+                                                <Button Style="{StaticResource Btn.Icon}" Content="&#xE838;" ToolTip="{c:T 'Mở thư mục'}" Margin="6,0,0,0" Click="OpenSet_Click"/>
+                                                <Button Style="{StaticResource Btn.Icon}" Content="&#xE74D;" ToolTip="{c:T 'Xóa bản sao lưu'}" Click="DeleteSet_Click"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </DockPanel>
+
+            <!-- ================= Dữ liệu cá nhân ================= -->
+            <DockPanel x:Name="DataPanel" Visibility="Collapsed">
+                <Border DockPanel.Dock="Top" CornerRadius="10" Background="{DynamicResource B.AccentSoft}" Padding="16,11" Margin="0,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="&#xE946;" Style="{StaticResource T.Icon}" Foreground="{DynamicResource B.Accent}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Style="{StaticResource T.Sub}" Margin="10,0,0,0" Foreground="{DynamicResource B.Text}" VerticalAlignment="Center"
+                                   Text="{c:T 'Chép dữ liệu quan trọng sang ổ khác hoặc USB trước khi cài lại Windows. Lần sau chỉ chép tệp mới hoặc đã sửa, không bao giờ xóa tệp ở nơi lưu.'}"/>
+                    </Grid>
+                </Border>
+
+                <Border DockPanel.Dock="Bottom" Style="{StaticResource Card}" Margin="0,12,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{c:T 'Lưu vào:'}" Style="{StaticResource T.Sub}"/>
+                                <TextBlock x:Name="DestText" FontWeight="SemiBold" Margin="8,0,0,0" TextTrimming="CharacterEllipsis" MaxWidth="440"/>
+                                <Button Style="{StaticResource Btn.Link}" Content="{c:T 'Chọn nơi lưu…'}" Margin="10,0,0,0" Click="ChooseDest_Click"/>
+                            </StackPanel>
+                            <TextBlock x:Name="DataStatus" Style="{StaticResource T.Muted}" Margin="0,6,0,0" TextTrimming="CharacterEllipsis"/>
+                            <ProgressBar x:Name="DataProgressBar" IsIndeterminate="True" Margin="0,8,0,0" Visibility="Collapsed"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                            <Button x:Name="DataRestoreBtn" Content="{c:T 'Phục hồi…'}" Click="DataRestore_Click"/>
+                            <Button x:Name="DataCancelBtn" Content="{c:T 'Dừng'}" Margin="8,0,0,0" Click="DataCancel_Click" Visibility="Collapsed"/>
+                            <Button x:Name="DataBackupBtn" Style="{StaticResource Btn.Primary}" Margin="8,0,0,0" MinWidth="150" Height="40" Click="DataBackup_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE74E;" Style="{StaticResource T.Icon}" FontSize="14"/>
+                                    <TextBlock Text="{c:T 'Sao lưu dữ liệu'}" Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Grid DockPanel.Dock="Top" Margin="2,0,0,8">
+                    <TextBlock x:Name="DataSummary" Style="{StaticResource T.H3}" VerticalAlignment="Center"/>
+                    <Button HorizontalAlignment="Right" Click="AddFolder_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE710;" Style="{StaticResource T.Icon}" FontSize="12"/>
+                            <TextBlock Text="{c:T 'Thêm thư mục…'}" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <Border Style="{StaticResource Card}" Padding="6">
+                    <ListBox x:Name="SourceList" Style="{StaticResource PlainList}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Row}" Padding="12,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" Click="Source_Click"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Glyph}" Style="{StaticResource T.Icon}" FontSize="16" Foreground="{DynamicResource B.Accent}" Margin="12,0,0,0"/>
+                                        <StackPanel Grid.Column="2" Margin="12,0,12,0">
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding PathText}" Style="{StaticResource T.Muted}" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="3" Text="{Binding SizeText}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <Button Grid.Column="4" Style="{StaticResource Btn.Icon}" Content="&#xE711;" ToolTip="{c:T 'Bỏ thư mục này'}" Margin="8,0,0,0"
+                                                Visibility="{Binding IsCustom, Converter={StaticResource BoolVis}}" Click="RemoveFolder_Click"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </DockPanel>
+
+            <!-- ================= Tự động ================= -->
+            <ScrollViewer x:Name="AutoPanel" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel>
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="{c:T 'Sao lưu tự động theo lịch'}" Style="{StaticResource T.H3}"/>
+                            <TextBlock Text="{c:T 'Phần mềm tự sao lưu cấu hình Windows ở chế độ nền (không hiện cửa sổ). Nếu máy tắt đúng giờ hẹn, sẽ chạy bù khi bật lại.'}"
+                                       Style="{StaticResource T.Sub}" Margin="0,4,0,12"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{c:T 'Tần suất:'}" Style="{StaticResource T.Body}" VerticalAlignment="Center" Width="150"/>
+                                <ComboBox x:Name="AutoModeBox" Width="260" SelectionChanged="AutoSetting_Changed"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="{c:T 'Giữ lại:'}" Style="{StaticResource T.Body}" VerticalAlignment="Center" Width="150"/>
+                                <ComboBox x:Name="KeepBox" Width="260" SelectionChanged="AutoSetting_Changed"/>
+                            </StackPanel>
+                            <CheckBox x:Name="AutoDrivers" Content="{c:T 'Sao lưu cả driver (tốn thêm dung lượng, chậm hơn)'}" Margin="0,14,0,0" Click="AutoSetting_Changed"/>
+                            <CheckBox x:Name="AutoData" Content="{c:T 'Sao lưu cả dữ liệu cá nhân đã chọn ở thẻ « Dữ liệu cá nhân »'}" Margin="0,8,0,0" Click="AutoSetting_Changed"/>
+                            <TextBlock x:Name="AutoStatus" Style="{StaticResource T.Muted}" Margin="0,12,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="{c:T 'Bảo vệ trước khi thay đổi'}" Style="{StaticResource T.H3}"/>
+                            <Grid Margin="0,12,0,0">
+                                <StackPanel Margin="0,0,70,0">
+                                    <TextBlock Text="{c:T 'Tự sao lưu cấu hình trước khi tối ưu, sửa lỗi hoặc phục hồi'}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{c:T 'Mất vài giây, một lần mỗi phiên làm việc. Vẫn phục hồi được kể cả khi System Restore bị tắt.'}" Style="{StaticResource T.Sub}" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <CheckBox x:Name="BeforeChange" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="AutoSetting_Changed"/>
+                            </Grid>
+                            <Grid Margin="0,14,0,0">
+                                <StackPanel Margin="0,0,70,0">
+                                    <TextBlock Text="{c:T 'Tạo điểm khôi phục hệ thống trước khi tối ưu'}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{c:T 'Dùng System Restore của Windows – quay lại được cả khi Windows gặp sự cố khởi động.'}" Style="{StaticResource T.Sub}" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <CheckBox x:Name="AutoRestore" Style="{StaticResource Switch}" HorizontalAlignment="Right" Click="AutoSetting_Changed"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="{c:T 'Nơi lưu bản sao lưu cấu hình'}" Style="{StaticResource T.H3}"/>
+                            <TextBlock x:Name="AutoRootText" Style="{StaticResource T.Sub}" Margin="0,6,0,10" TextWrapping="Wrap"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="{c:T 'Đổi nơi lưu…'}" Click="ChangeRoot_Click"/>
+                                <Button Content="{c:T 'Dùng mặc định'}" Margin="8,0,0,0" Click="DefaultRoot_Click"/>
+                                <Button Content="{c:T 'Mở thư mục'}" Margin="8,0,0,0" Click="OpenRoot_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

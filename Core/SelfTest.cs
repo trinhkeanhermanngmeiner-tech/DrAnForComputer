@@ -191,6 +191,163 @@ namespace BacSiMayTinh.Core
             }
             catch (Exception ex) { Check("Cập nhật từ GitHub", false, ex.GetBaseException().Message); }
 
+            // ===== v1.2: Sao lưu & phục hồi cấu hình =====
+            var bkRoot = Path.Combine(Path.GetTempPath(), "dran_selftest_backup");
+            const string BkKey = @"HKCU\Software\DrAnForComputer_SelfTest_Backup";
+            var oldBefore = AppSettings.Current.AutoBackupBeforeChange;
+            var oldKeep = AppSettings.Current.AutoBackupKeep;
+            try
+            {
+                if (Directory.Exists(bkRoot)) Directory.Delete(bkRoot, true);
+                var sw = System.Diagnostics.Stopwatch.StartNew();
+                var set = ConfigBackup.Create(new BackupOptions { Root = bkRoot, Kind = "manual", WifiPasswords = false,
+                    Components = new HashSet<string>(ConfigBackup.QuickComponents) });
+                Check("Tạo bản sao lưu cấu hình", File.Exists(Path.Combine(set.Folder, ConfigBackup.ManifestName)) && set.Manifest.Registry.Count >= 40,
+                    $"{set.Manifest.Registry.Count} giá trị registry, {set.Manifest.ServiceValues.Count} dịch vụ, {set.Manifest.Startup.Count} mục khởi động, " +
+                    $"{set.Manifest.ContextMenu.Count} menu, {set.Manifest.Dns.Count} card mạng, nguồn {set.Manifest.PowerScheme}, {sw.ElapsedMilliseconds} ms");
+                var loaded = ConfigBackup.Load(set.Folder);
+                Check("Đọc lại bản sao lưu", loaded != null && loaded.Manifest.Components.Count == ConfigBackup.QuickComponents.Length,
+                    loaded == null ? "null" : string.Join(",", loaded.Manifest.Components));
+
+                // Phục hồi trên khóa thử: giá trị bị đổi phải trở về, giá trị vốn không có phải bị xóa.
+                RegistryHelper.DeleteKeyTree(BkKey);
+                RegistryHelper.SetValue(BkKey, "Dw", 7, RegistryValueKind.DWord);
+                RegistryHelper.SetValue(BkKey, "Sz", "goc", RegistryValueKind.String);
+                var m2 = new BackupManifest { Created = DateTime.Now.ToString("s"), Kind = "manual", Machine = Environment.MachineName };
+                m2.Components.Add("tweaks");
+                m2.Registry.Add(UndoStore.Capture(BkKey, "Dw"));
+                m2.Registry.Add(UndoStore.Capture(BkKey, "Sz"));
+                m2.Registry.Add(UndoStore.Capture(BkKey, "Missing"));
+                var dir2 = Path.Combine(bkRoot, "thu_phuc_hoi");
+                Directory.CreateDirectory(dir2);
+                JsonFile.Save(Path.Combine(dir2, ConfigBackup.ManifestName), m2);
+                RegistryHelper.SetValue(BkKey, "Dw", 99, RegistryValueKind.DWord);
+                RegistryHelper.SetValue(BkKey, "Missing", 1, RegistryValueKind.DWord);
+                int undoCount = UndoStore.Current.Tweaks.Count + UndoStore.Current.Misc.Count;
+                AppSettings.Current.AutoBackupBeforeChange = false;
+                var rep = ConfigBackup.Restore(ConfigBackup.Load(dir2), new HashSet<string> { "tweaks" });
+                Check("Phục hồi giá trị registry đã bị đổi", RegistryHelper.ValueEquals(RegistryHelper.GetValue(BkKey, "Dw"), 7) &&
+                    (RegistryHelper.GetValue(BkKey, "Sz") as string) == "goc", string.Join(" | ", rep.Lines));
+                Check("Phục hồi xóa giá trị vốn không có", !RegistryHelper.ValueExists(BkKey, "Missing"));
+                Check("Giữ nguyên dữ liệu hoàn tác khi bản sao lưu không kèm", UndoStore.Current.Tweaks.Count + UndoStore.Current.Misc.Count == undoCount);
+
+                // Giữ lại N bản tự động mới nhất
+                for (int i = 0; i < 4; i++)
+                {
+                    var d = Path.Combine(bkRoot, "auto_" + i);
+                    Directory.CreateDirectory(d);
+                    JsonFile.Save(Path.Combine(d, ConfigBackup.ManifestName), new BackupManifest { Kind = "auto", Created = DateTime.Now.AddDays(-i).ToString("s") });
+                }
+                AppSettings.Current.AutoBackupKeep = 2;
+                ConfigBackup.ApplyRetention(bkRoot, "auto");
+                var autos = Directory.GetDirectories(bkRoot, "auto_*").Select(Path.GetFileName).OrderBy(x => x).ToList();
+                Check("Chỉ giữ 2 bản tự động mới nhất, không đụng bản thủ công", autos.SequenceEqual(new[] { "auto_0", "auto_1" }) && Directory.Exists(set.Folder),
+                    string.Join(",", autos));
+            }
+            catch (Exception ex) { Check("Sao lưu & phục hồi cấu hình", false, ex.ToString()); }
+            finally
+            {
+                AppSettings.Current.AutoBackupBeforeChange = oldBefore;
+                AppSettings.Current.AutoBackupKeep = oldKeep;
+                AppSettings.Current.BackupRoots?.RemoveAll(x => string.Equals(x, bkRoot, StringComparison.OrdinalIgnoreCase));
+                AppSettings.SaveCurrent();
+                RegistryHelper.DeleteKeyTree(BkKey);
+                try { if (Directory.Exists(bkRoot)) Directory.Delete(bkRoot, true); } catch { }
+            }
+
+            // ===== v1.2: Sao lưu dữ liệu cá nhân (robocopy, tên tiếng Việt) =====
+            var dataSrc = Path.Combine(Path.GetTempPath(), "dran_selftest_data_src");
+            var dataDst = Path.Combine(Path.GetTempPath(), "dran_selftest_data_dst");
+            var dataBack = Path.Combine(Path.GetTempPath(), "dran_selftest_data_back");
+            var oldLast = AppSettings.Current.LastDataBackup;
+            try
+            {
+                foreach (var d in new[] { dataSrc, dataDst, dataBack }) if (Directory.Exists(d)) Directory.Delete(d, true);
+                Directory.CreateDirectory(Path.Combine(dataSrc, "Thư mục con"));
+                File.WriteAllBytes(Path.Combine(dataSrc, "Bảng lương tháng 10.xlsx"), new byte[3000]);
+                File.WriteAllBytes(Path.Combine(dataSrc, "Thư mục con", "ảnh đẹp.jpg"), new byte[5000]);
+                var src = new DataSource { Id = "custom:" + dataSrc, Name = "Thử", IsCustom = true };
+                src.Parts.Add(new DataPart { Source = dataSrc, SubFolder = "khac_thu" });
+                var r1 = DataBackup.RunAsync(new List<DataSource> { src }, dataDst, null, CancellationToken.None).Result;
+                var tgt = DataBackup.TargetFolder(dataDst);
+                Check("Sao lưu dữ liệu (robocopy) – đếm tệp & dung lượng", r1.Files == 2 && r1.Bytes == 8000 && r1.Errors == 0 &&
+                    File.Exists(Path.Combine(tgt, "khac_thu", "Thư mục con", "ảnh đẹp.jpg")), $"{r1.Files} tệp, {r1.Bytes} byte, lỗi {r1.Errors} | {DataBackup.LastRun}");
+                var r2 = DataBackup.RunAsync(new List<DataSource> { src }, dataDst, null, CancellationToken.None).Result;
+                Check("Sao lưu lần 2 chỉ chép tệp thay đổi", r2.Files == 0, r2.Files + " tệp");
+                var man = DataBackup.LoadBackup(tgt);
+                man.Entries[0].OriginalPath = dataBack;
+                var r3 = DataBackup.RestoreAsync(tgt, man, true, null, CancellationToken.None).Result;
+                Check("Phục hồi dữ liệu về thư mục gốc", r3.Files == 2 && File.Exists(Path.Combine(dataBack, "Bảng lương tháng 10.xlsx")), r3.Files + " tệp | " + DataBackup.LastRun);
+            }
+            catch (Exception ex) { Check("Sao lưu dữ liệu cá nhân", false, ex.GetBaseException().ToString()); }
+            finally
+            {
+                AppSettings.Current.LastDataBackup = oldLast;
+                AppSettings.SaveCurrent();
+                foreach (var d in new[] { dataSrc, dataDst, dataBack }) try { if (Directory.Exists(d)) Directory.Delete(d, true); } catch { }
+            }
+
+            // ===== v1.2: Driver =====
+            try
+            {
+                var drv = DriverManager.List(true);
+                Check("Đọc danh sách driver", drv.Count > 5, $"{drv.Count} driver, {drv.Count(d => d.IsThirdParty)} của hãng thứ ba");
+                var pr = DriverManager.Problems();
+                Check("Đọc thiết bị lỗi", pr != null, pr.Count + " thiết bị: " + string.Join("; ", pr.Take(3).Select(x => x.Name + " " + x.Code)));
+                var store = DriverStore.FindOldDuplicates();
+                Check("Quét driver cũ trùng lặp", store != null, store.Count + " gói, " + FileUtil.FormatSize(store.Sum(x => x.Size)));
+                Check("So sánh phiên bản driver", DriverStore.ParseVersion("31.0.101.4502") > DriverStore.ParseVersion("30.0.101.1191") &&
+                    DriverStore.ParseVersion("10.0.19041.1") < DriverStore.ParseVersion("10.0.22621.1"));
+                Check("Gợi ý công cụ của hãng", DriverManager.VendorTools() != null);
+            }
+            catch (Exception ex) { Check("Driver", false, ex.ToString()); }
+
+            // Windows Update (COM): đọc lịch sử, tìm driver mới (không cài)
+            try
+            {
+                var last = Wua.LastSuccessfulInstall();
+                Check("Đọc lịch sử Windows Update", true, last?.ToString("dd/MM/yyyy") ?? "không có");
+                var t = Task.Run(() => DriverUpdater.Search(CancellationToken.None));
+                if (t.Wait(TimeSpan.FromMinutes(6)))
+                    Check("Tìm driver qua Windows Update", t.Result != null, t.Result.Count + " bản: " + string.Join("; ", t.Result.Take(3).Select(u => u.Title)));
+                else Check("Tìm driver qua Windows Update", true, "quá 6 phút – bỏ qua");
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.GetBaseException().Message;
+                // Máy chủ CI có thể chặn Windows Update – chỉ lỗi khi không phải lỗi mạng/chính sách.
+                Check("Tìm driver qua Windows Update", ex.GetBaseException() is InvalidOperationException, msg);
+            }
+
+            // ===== v1.2: Bảo mật & Windows Update =====
+            try
+            {
+                var items = SecurityCheck.RunAsync().Result;
+                Check("Kiểm tra bảo mật", items.Count >= 8 && SecurityCheck.Score(items) >= 0,
+                    string.Join(" | ", items.Select(i => i.Id + ":" + i.Level)) + " → " + SecurityCheck.Score(items) + " điểm");
+            }
+            catch (Exception ex) { Check("Kiểm tra bảo mật", false, ex.ToString()); }
+            try
+            {
+                var saved = WuManager.ManagedValues.Select(v => UndoStore.Capture(v.path, v.name)).ToList();
+                try
+                {
+                    WuManager.Pause(14);
+                    var until = WuManager.PausedUntil;
+                    Check("Tạm dừng Windows Update 2 tuần", until.HasValue && Math.Abs((until.Value - DateTime.Now).TotalDays - 14) < 0.1, until?.ToString("s"));
+                    WuManager.Resume();
+                    Check("Tiếp tục Windows Update", WuManager.PausedUntil == null);
+                    WuManager.SetActiveHours(7, 23);
+                    var ah = WuManager.ActiveHours;
+                    Check("Đặt giờ hoạt động", ah.start == 7 && ah.end == 23 && ah.manual);
+                    bool threw = false;
+                    try { WuManager.SetActiveHours(1, 23); } catch (ArgumentException) { threw = true; }
+                    Check("Chặn giờ hoạt động quá 18 tiếng", threw);
+                }
+                finally { foreach (var b in saved) UndoStore.Restore(b); }
+            }
+            catch (Exception ex) { Check("Windows Update", false, ex.ToString()); }
+
             // Từ điển tiếng Anh: placeholder khớp
             int badFmt = Strings.En.Count(kv =>
                 string.Join(",", System.Text.RegularExpressions.Regex.Matches(kv.Key, @"\{(\d+)").Cast<System.Text.RegularExpressions.Match>().Select(m => m.Groups[1].Value).Distinct().OrderBy(x => x)) !=

@@ -78,6 +78,10 @@
                         <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Dọn rác'}" Tag="&#xE74D;" CommandParameter="cleaner" Checked="Nav_Checked"/>
                         <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Tối ưu hệ thống'}" Tag="&#xEC4A;" CommandParameter="optimizer" Checked="Nav_Checked"/>
                         <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Sửa lỗi Windows'}" Tag="&#xE90F;" CommandParameter="repair" Checked="Nav_Checked"/>
+                        <TextBlock Text="{c:T 'BẢO VỆ'}" Style="{StaticResource T.Muted}" FontWeight="SemiBold" Margin="26,16,0,6"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Sao lưu &amp; Phục hồi'}" Tag="&#xE777;" CommandParameter="backup" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Driver'}" Tag="&#xE772;" CommandParameter="drivers" Checked="Nav_Checked"/>
+                        <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Bảo mật &amp; Cập nhật'}" Tag="&#xEA18;" CommandParameter="security" Checked="Nav_Checked"/>
                         <TextBlock Text="{c:T 'CÔNG CỤ'}" Style="{StaticResource T.Muted}" FontWeight="SemiBold" Margin="26,16,0,6"/>
                         <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Thông tin máy'}" Tag="&#xE7F8;" CommandParameter="sysinfo" Checked="Nav_Checked"/>
                         <RadioButton Style="{StaticResource NavItem}" Content="{c:T 'Phần mềm'}" Tag="&#xE7B8;" CommandParameter="uninstall" Checked="Nav_Checked"/>

@@ -238,6 +238,56 @@ namespace BacSiMayTinh.Modules
                 await ProcessRunner.CmdAsync($"schtasks /create /tn \"{name}\" /tr \"\\\"{exe}\\\" --autoclean\" /sc weekly /d SUN /st 12:00 /rl highest /f").ConfigureAwait(false);
         }
 
+        /// <summary>Sao lưu tự động: mode = off | weekly | monthly. Chạy bù khi máy bật lại nếu lỡ lịch.</summary>
+        public static async Task SetAutoBackupAsync(string mode, string exe = null)
+        {
+            exe = exe ?? AppInfo.ExePath;
+            const string name = "SaoLuuTuDong";
+            await ProcessRunner.CmdAsync($"schtasks /delete /tn \"{Folder}\\{name}\" /f").ConfigureAwait(false);
+            if (mode != "weekly" && mode != "monthly") return;
+            try
+            {
+                dynamic svc = Activator.CreateInstance(Type.GetTypeFromProgID("Schedule.Service"));
+                svc.Connect();
+                dynamic folder;
+                try { folder = svc.GetFolder("\\" + Folder); }
+                catch { folder = svc.GetFolder("\\").CreateFolder(Folder); }
+                dynamic def = svc.NewTask(0);
+                def.RegistrationInfo.Description = AppInfo.Name + " – " + L.T("Sao lưu tự động cấu hình Windows và driver");
+                def.Settings.StartWhenAvailable = true;           // máy tắt đúng giờ → chạy bù khi bật lại
+                def.Settings.DisallowStartIfOnBatteries = false;
+                def.Settings.StopIfGoingOnBatteries = false;
+                def.Settings.ExecutionTimeLimit = "PT3H";
+                def.Principal.RunLevel = 1;                       // quyền cao nhất
+                var start = DateTime.Today.AddDays(1).AddHours(12).AddMinutes(30).ToString("yyyy-MM-dd'T'HH:mm:ss");
+                if (mode == "weekly")
+                {
+                    dynamic t = def.Triggers.Create(3);           // TASK_TRIGGER_WEEKLY
+                    t.StartBoundary = start;
+                    t.DaysOfWeek = 64;                            // Thứ Bảy
+                    t.WeeksInterval = 1;
+                }
+                else
+                {
+                    dynamic t = def.Triggers.Create(4);           // TASK_TRIGGER_MONTHLY
+                    t.StartBoundary = start;
+                    t.DaysOfMonth = 1;                            // ngày 1
+                    t.MonthsOfYear = 4095;
+                }
+                dynamic a = def.Actions.Create(0);
+                a.Path = exe;
+                a.Arguments = "--autobackup";
+                folder.RegisterTaskDefinition(name, def, 6, null, null, 3);
+                Logger.Info("Đặt lịch sao lưu tự động: " + mode);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Tạo lịch sao lưu qua COM thất bại, dùng schtasks: " + ex.Message);
+                var sc = mode == "weekly" ? "/sc weekly /d SAT" : "/sc monthly /d 1";
+                await ProcessRunner.CmdAsync($"schtasks /create /tn \"{Folder}\\{name}\" /tr \"\\\"{exe}\\\" --autobackup\" {sc} /st 12:30 /rl highest /f").ConfigureAwait(false);
+            }
+        }
+
         /// <summary>Xóa mọi tác vụ của ứng dụng (cả tên cũ của bản 1.0).</summary>
         public static async Task RemoveAllAsync()
         {
@@ -245,6 +295,7 @@ namespace BacSiMayTinh.Modules
             {
                 await ProcessRunner.CmdAsync($"schtasks /delete /tn \"{folder}\\KhoiDong\" /f").ConfigureAwait(false);
                 await ProcessRunner.CmdAsync($"schtasks /delete /tn \"{folder}\\DonRacTuDong\" /f").ConfigureAwait(false);
+                await ProcessRunner.CmdAsync($"schtasks /delete /tn \"{folder}\\SaoLuuTuDong\" /f").ConfigureAwait(false);
                 try
                 {
                     dynamic svc = Activator.CreateInstance(Type.GetTypeFromProgID("Schedule.Service"));

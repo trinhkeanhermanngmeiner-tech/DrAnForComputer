@@ -54,6 +54,20 @@ namespace BacSiMayTinh.Core
         [DataMember] public bool AutoCheckUpdate { get; set; }
         [DataMember] public string LastUpdateCheck { get; set; }
 
+        // Sao lưu & phục hồi (v1.2)
+        [DataMember] public string BackupRoot { get; set; }
+        [DataMember] public List<string> BackupRoots { get; set; }
+        [DataMember] public string AutoBackup { get; set; }
+        [DataMember] public bool AutoBackupDrivers { get; set; }
+        [DataMember] public int AutoBackupKeep { get; set; }
+        [DataMember] public bool AutoBackupBeforeChange { get; set; }
+        [DataMember] public string LastAutoBackup { get; set; }
+        [DataMember] public string DataBackupDest { get; set; }
+        [DataMember] public List<string> DataBackupSources { get; set; }
+        [DataMember] public List<string> DataBackupCustom { get; set; }
+        [DataMember] public bool AutoBackupData { get; set; }
+        [DataMember] public string LastDataBackup { get; set; }
+
         public AppSettings() => Defaults();
 
         [OnDeserializing]
@@ -67,6 +81,11 @@ namespace BacSiMayTinh.Core
             AutoRestorePoint = true;
             AutoFreeRamThreshold = 85;
             AutoClean = "off";
+            AutoBackup = "off";
+            AutoBackupKeep = 10;
+            AutoBackupBeforeChange = true;
+            BackupRoots = new List<string>();
+            DataBackupCustom = new List<string>();
         }
 
         private static AppSettings _current;

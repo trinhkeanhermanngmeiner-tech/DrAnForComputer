@@ -1,0 +1,40 @@
+DrAn For Computer – Hướng dẫn nhanh
+Tác giả: BS. Trịnh Kế An – Phần mềm miễn phí
+
+1. CHẠY PHẦN MỀM
+   - Bấm đúp DrAnForComputer.exe (không cần cài đặt, cần quyền quản trị).
+   - Nếu Windows SmartScreen cảnh báo: bấm "More info" -> "Run anyway".
+   - Muốn cài hẳn vào máy: Cài đặt -> Cài đặt vào máy.
+
+2. CHĂM SÓC MÁY HẰNG NGÀY
+   - Tổng quan: khám sức khỏe máy, bấm "Tối ưu ngay".
+   - Dọn rác: quét rồi dọn tệp tạm, bộ đệm trình duyệt, Zalo…
+   - Tối ưu hệ thống: tắt ứng dụng khởi động thừa, bật tinh chỉnh khuyên dùng.
+     Mọi tinh chỉnh đều hoàn tác được (tắt công tắc là trở lại như cũ).
+   - Sửa lỗi Windows: chọn đúng triệu chứng rồi bấm "Sửa ngay".
+
+3. SAO LƯU & PHỤC HỒI (MỚI)
+   - Sao lưu & Phục hồi -> Cấu hình Windows -> "Sao lưu ngay".
+     Nên bấm "Đổi nơi lưu" sang ổ D hoặc USB để còn bản sao lưu sau khi cài lại Windows.
+   - Phục hồi: chọn bản sao lưu -> "Phục hồi" -> tích các phần muốn đưa về.
+   - Sau khi cài lại Windows: chạy phần mềm -> "Mở bản sao lưu khác…" -> chọn thư mục sao lưu.
+   - Dữ liệu cá nhân: chọn Desktop, Tài liệu, Zalo… -> "Chọn nơi lưu…" (ổ D/USB) -> "Sao lưu dữ liệu".
+   - Thẻ "Tự động": bật sao lưu hằng tuần/hằng tháng.
+
+4. DRIVER (MỚI)
+   - Driver đang dùng: xem driver, thiết bị lỗi; "Sao lưu tất cả" trước khi cài lại Win.
+   - Sau khi cài lại Win: "Phục hồi từ thư mục…" -> chọn thư mục sao lưu driver.
+   - Cập nhật driver: "Tìm bản mới" -> chọn -> "Cài mục đã chọn".
+     Driver cũ luôn được sao lưu; nếu có trục trặc vào "Lịch sử & quay lại" -> "Quay lại bản cũ".
+   - Dọn driver cũ: "Quét" -> "Xóa gói đã chọn" để giải phóng ổ C.
+
+5. BẢO MẬT & CẬP NHẬT (MỚI)
+   - Kiểm tra bảo mật: xem điểm, bấm "Sửa tất cả" hoặc sửa từng mục.
+   - Quét virus: quét nhanh, quét toàn bộ hoặc quét USB trước khi mở tệp.
+   - Windows Update: tạm dừng 1–5 tuần, đặt giờ hoạt động, ẩn bản cập nhật gây lỗi.
+
+6. CẬP NHẬT PHẦN MỀM
+   - Khi có bản mới, nút "Có bản mới" hiện ở thanh bên trái – bấm là tự tải và cài.
+
+Báo lỗi, góp ý: bstrinhkean@gmail.com
+Ủng hộ tác giả (tự nguyện): Ngân hàng TMCP Bản Việt (BVBank) – STK 9021642814421

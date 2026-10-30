@@ -65,6 +65,14 @@ namespace BacSiMayTinh.Core
         /// <summary>Tạo điểm khôi phục một lần trong mỗi phiên làm việc (nếu bật trong Cài đặt).</summary>
         public static async Task EnsureForSessionAsync()
         {
+            // Bản sao lưu cấu hình nhanh (vài giây) – phục hồi được kể cả khi System Restore bị tắt.
+            if (AppSettings.Current.AutoBackupBeforeChange && !Modules.ConfigBackup.SessionSnapshotDone)
+            {
+                var m = UI.MainWindow.Instance;
+                m?.ShowBusy(L.T("Đang tự sao lưu cấu hình hiện tại…"));
+                try { await Modules.ConfigBackup.EnsureSessionSnapshotAsync(); }
+                finally { m?.HideBusy(); }
+            }
             if (_createdThisSession || !AppSettings.Current.AutoRestorePoint) return;
             var main = UI.MainWindow.Instance;
             main?.ShowBusy(L.T("Đang tạo điểm khôi phục hệ thống…\nViệc này giúp bạn quay lại trạng thái cũ nếu cần."));

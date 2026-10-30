@@ -17,6 +17,10 @@ Nếu Windows SmartScreen cảnh báo: bấm **More info → Run anyway** (phầ
 - Thông tin phần cứng, sức khỏe ổ cứng/pin, xuất báo cáo
 - Quản lý phần mềm: gỡ sạch, cập nhật hàng loạt, cài nhanh qua winget
 - Phân tích ổ đĩa, tệp trùng lặp, đo tốc độ và **phát hiện USB giả dung lượng**
+- **Sao lưu & Phục hồi** (mới 1.2): chụp lại tinh chỉnh Windows, dịch vụ, ứng dụng khởi động, menu chuột phải, gói điện năng, hosts, DNS, Wi‑Fi, driver – phục hồi từng phần, mang sang máy mới hoặc sau khi cài lại Win; sao lưu tự động theo lịch và trước mỗi lần tối ưu
+- **Sao lưu dữ liệu cá nhân** (mới 1.2): Desktop, Tài liệu, Ảnh, dữ liệu Zalo PC, dấu trang Chrome/Edge/Cốc Cốc… sang ổ khác/USB (chép tăng dần)
+- **Driver** (mới 1.2): danh sách driver, phát hiện thiết bị lỗi/thiếu driver, sao lưu – phục hồi driver, **cập nhật driver qua Windows Update** (tự sao lưu bản cũ, có nút quay lại), dọn driver cũ trùng lặp giải phóng ổ C
+- **Bảo mật & Cập nhật** (mới 1.2): chấm điểm bảo mật (diệt virus, tường lửa, UAC, SMBv1, AutoRun USB…) và sửa một chạm, quét virus bằng Microsoft Defender (nhanh/toàn bộ/USB), tạm dừng Windows Update 1–5 tuần, giờ hoạt động, ẩn bản cập nhật gây lỗi
 - **Tự cập nhật** từ GitHub Releases (bấm một nút là tải và cài bản mới)
 
 ## Ủng hộ tác giả
@@ -71,6 +75,7 @@ Kết quả: `bin/Release/net48/DrAnForComputer.exe`. (Thư mục/namespace mã 
 |---|---|
 | `--tray` | Khởi động ẩn dưới khay |
 | `--autoclean` | Dọn rác an toàn rồi thoát (lịch dọn tự động) |
+| `--autobackup` | Sao lưu cấu hình (và dữ liệu cá nhân nếu bật) rồi thoát (lịch sao lưu tự động) |
 | `--uninstall` | Gỡ cài đặt (được đăng ký trong Cài đặt › Ứng dụng của Windows) |
 | `--lang en\|vi` | Chọn ngôn ngữ cho lần chạy này |
 | `--selftest <tệp>` | Bộ tự kiểm tra (chỉ dùng khóa registry/thư mục tạm riêng) |
@@ -84,5 +89,16 @@ Kết quả: `bin/Release/net48/DrAnForComputer.exe`. (Thư mục/namespace mã 
 
 ## Dữ liệu người dùng
 
-`%LocalAppData%\DrAnForComputer\` – `caidat.json`, `SaoLuu\hoantac.json`, `SaoLuu\*.reg`, `NhatKy\*.log`.
+`%LocalAppData%\DrAnForComputer\` – `caidat.json`, `SaoLuu\hoantac.json`, `SaoLuu\*.reg`, `SaoLuu\lichsu_driver.json`, `NhatKy\*.log`.
+
+Bản sao lưu cấu hình (mặc định `SaoLuu\BanSaoLuu\`, đổi được sang ổ D/USB): mỗi bản là một thư mục độc lập gồm `manifest.json`
+(giá trị registry, dịch vụ, khởi động, menu chuột phải, DNS…), `hoantac.json`, `power.pow`, `hosts`, `WiFi\*.xml`, `Startup\*.lnk`, `Drivers\`.
+Chép cả thư mục sang máy khác rồi dùng « Mở bản sao lưu khác… » để phục hồi.
+
+Bản sao lưu dữ liệu cá nhân: `<nơi lưu>\DrAn_DuLieu_<máy>_<người dùng>\` kèm `DrAn_DuLieu.json`.
+
+## Kiểm tra tự động (GitHub Actions)
+
+`.github/workflows/build.yml` build trên Windows mỗi lần đẩy mã, chạy `--selftest` và chụp giao diện.
+Đẩy tag `vX.Y.Z` (khớp `AppInfo.Version`) → tự tạo Release kèm `DrAnForComputer.exe` và `.zip`; ghi chú phát hành lấy từ `docs/release-notes/vX.Y.Z.md`.
 Dữ liệu của bản 1.0 (`%LocalAppData%\BacSiMayTinh\`) được tự chép sang ở lần chạy đầu.

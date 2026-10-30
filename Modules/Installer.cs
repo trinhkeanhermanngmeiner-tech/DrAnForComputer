@@ -43,6 +43,7 @@ namespace BacSiMayTinh.Modules
             var s = AppSettings.Current;
             if (s.StartWithWindows) Scheduler.SetStartupAsync(true, InstallExe).Wait();
             if (s.AutoClean != "off") Scheduler.SetAutoCleanAsync(s.AutoClean, InstallExe).Wait();
+            if (s.AutoBackup != "off") Scheduler.SetAutoBackupAsync(s.AutoBackup, InstallExe).Wait();
             Logger.Info("Cài đặt vào " + InstallDir);
         }
 

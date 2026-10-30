@@ -74,6 +74,8 @@ namespace BacSiMayTinh.Pages
                     if (File.Exists(file)) { ProcessRunner.Open(file); MainWindow.Instance.Toast(L.T("Đã lưu báo cáo pin ra Desktop.")); }
                 } },
                 new ToolTile { Glyph = "", Title = L.T("Sao lưu driver"), Description = L.T("Lưu toàn bộ driver đang dùng để cài lại sau khi cài Win."), Action = BackupDrivers },
+                new ToolTile { Glyph = "\uE777", Title = L.T("Sao lưu & Phục hồi"), Description = L.T("Chụp lại tinh chỉnh Windows, dịch vụ, driver, dữ liệu cá nhân để quay về khi cần."), Action = () => MainWindow.Instance.Navigate("backup") },
+                new ToolTile { Glyph = "\uE895", Title = L.T("Cập nhật driver"), Description = L.T("Tìm driver mới qua Windows Update, có sao lưu và quay lại bản cũ."), Action = () => MainWindow.Instance.GetPage<DriversPage>("drivers")?.ShowTab("update") },
                 new ToolTile { Glyph = "", Title = L.T("Kiểm tra lỗi RAM"), Description = L.T("Khởi động lại và kiểm tra RAM bằng Windows Memory Diagnostic."), Action = () =>
                 {
                     if (Dialog.Confirm(L.T("Kiểm tra RAM?"), L.T("Công cụ Windows Memory Diagnostic sẽ mở ra. Chọn « Restart now » để khởi động lại và kiểm tra (mất 10–20 phút). Hãy lưu công việc trước."), L.T("Mở công cụ"), kind: ToastKind.Info))

@@ -1,0 +1,99 @@
+# Tự động build DrAnForComputer.exe trên Windows, chạy bộ tự kiểm tra và chụp giao diện.
+# Đẩy tag vX.Y.Z → tự tạo Release kèm DrAnForComputer.exe và tệp .zip (ứng dụng sẽ tự cập nhật từ Release này).
+name: Build
+
+on:
+  push:
+    branches-ignore: [ci-out]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build (Release)
+        shell: pwsh
+        run: |
+          dotnet build BacSiMayTinh.csproj -c Release -nologo -clp:NoSummary 2>&1 | Tee-Object -FilePath build.log
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          Get-Item bin\Release\net48\DrAnForComputer.exe | Format-List Name, Length
+
+      - name: Kiểm tra số phiên bản khớp tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        run: |
+          $v = '${{ github.ref_name }}'.TrimStart('v')
+          $src = Get-Content Core\AppInfo.cs -Raw
+          if ($src -notmatch "Version = `"$([regex]::Escape($v))`"") { Write-Error "AppInfo.Version khác tag $v"; exit 1 }
+
+      - name: Bộ tự kiểm tra (--selftest)
+        if: always()
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          New-Item -ItemType Directory -Force out | Out-Null
+          $exe = (Resolve-Path bin\Release\net48\DrAnForComputer.exe).Path
+          $p = Start-Process $exe -ArgumentList '--selftest', "$PWD\out\selftest.txt" -PassThru
+          if (-not $p.WaitForExit(600000)) { $p.Kill(); "QUÁ THỜI GIAN" | Out-File out\selftest.txt -Append }
+          Get-Content out\selftest.txt -Encoding utf8
+
+      # Chụp giao diện & đẩy kết quả chỉ chạy trên nhánh phát triển dev/* (để xem trước khi phát hành).
+      - name: Chụp giao diện
+        if: always() && startsWith(github.ref, 'refs/heads/dev/')
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $exe = (Resolve-Path bin\Release\net48\DrAnForComputer.exe).Path
+          $shots = @(
+            @('dashboard','vi',''), @('tools','vi',''),
+            @('backup','vi',''), @('backup','vi','data'), @('backup','vi','auto'),
+            @('drivers','vi',''), @('drivers','vi','update'), @('drivers','vi','store'), @('drivers','vi','history'),
+            @('security','vi',''), @('security','vi','scan'), @('security','vi','wu'),
+            @('backup','en',''), @('drivers','en',''), @('security','en','')
+          )
+          foreach ($s in $shots) {
+            $name = "out\snap_$($s[0])_$($s[1])$(if ($s[2]) { '_' + $s[2] }).png"
+            $a = @('--snap', $s[0], "$PWD\$name")
+            if ($s[2]) { $a += $s[2] }
+            $a += @('--lang', $s[1])
+            $p = Start-Process $exe -ArgumentList $a -PassThru
+            if (-not $p.WaitForExit(120000)) { $p.Kill() }
+            "$name : $(Test-Path $name)"
+          }
+
+      - name: Đẩy kết quả sang nhánh ci-out
+        if: always() && startsWith(github.ref, 'refs/heads/dev/')
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force out | Out-Null
+          Copy-Item build.log out\ -ErrorAction SilentlyContinue
+          Copy-Item "$env:LOCALAPPDATA\DrAnForComputer\NhatKy\*.log" out\ -ErrorAction SilentlyContinue
+          Copy-Item bin\Release\net48\DrAnForComputer.exe out\ -ErrorAction SilentlyContinue
+          "${{ github.sha }}" | Out-File out\commit.txt
+          Set-Location out
+          git init -q -b ci-out
+          git config user.name "ci"; git config user.email "ci@users.noreply.github.com"
+          git add -A; git commit -q -m "CI ${{ github.sha }}"
+          git push -f -q "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-out
+
+      - name: Tạo Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $v = '${{ github.ref_name }}'.TrimStart('v')
+          New-Item -ItemType Directory -Force rel | Out-Null
+          Copy-Item bin\Release\net48\DrAnForComputer.exe rel\
+          Copy-Item docs\HuongDan.txt rel\ -ErrorAction SilentlyContinue
+          Compress-Archive -Path rel\* -DestinationPath "DrAnForComputer_v$v.zip" -Force
+          $notes = "docs\release-notes\v$v.md"
+          if (-not (Test-Path $notes)) { "DrAn For Computer $v" | Out-File $notes -Encoding utf8 }
+          gh release create '${{ github.ref_name }}' rel\DrAnForComputer.exe "DrAnForComputer_v$v.zip" --title "DrAn For Computer $v" --notes-file $notes
